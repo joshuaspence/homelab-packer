@@ -13,7 +13,7 @@ OS_ZIP      := raspian.zip
 build: $(OS_IMG)
 
 .PHONY: clean
-clean: unmount
+clean:
 	rm --force --recursive $(MOUNTPOINT) $(OS_IMG)
 
 .PHONY: clean-all
@@ -22,12 +22,6 @@ clean-all: clean
 
 .PHONY: download
 download: $(OS_ZIP)
-
-.PHONY: unmount
-unmount:
-	mountpoint --quiet $(MOUNTPOINT) && umount $(MOUNTPOINT)
-	losetup --detach $(LOOP_DEVICE)
-	rmdir $(MOUNTPOINT)
 
 #===============================================================================
 # Rules
