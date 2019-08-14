@@ -19,7 +19,7 @@ build: $(OS_IMG)
 
 .PHONY: clean
 clean:
-	rm --force --recursive $(MOUNTPOINT) $(OS_IMG)
+	rm --force $(OS_IMG)
 
 .PHONY: clean-all
 clean-all: clean
