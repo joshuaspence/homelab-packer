@@ -25,7 +25,7 @@ download: $(OS_ZIP)
 
 .PHONY: mount
 mount:
-	mkdir -p $(MOUNTPOINT)
+	mkdir $(MOUNTPOINT)
 	mount -o loop,offset=$(shell echo 8192*512 | bc) $(OS_IMG) $(MOUNTPOINT)
 
 .PHONY: unmount
@@ -43,7 +43,7 @@ $(OS_ZIP):
 $(OS_IMG): $(OS_ZIP) $(FILES)
 	unzip -p $< > $@
 	fdisk -lu $(OS_IMG)
-	mkdir -p $(MOUNTPOINT)
+	mkdir $(MOUNTPOINT)
 	mount -o loop,offset=$(shell echo 8192*512 | bc) $@ $(MOUNTPOINT)
 	cp $(filter-out $<,$^) $(MOUNTPOINT)/
 	umount $(MOUNTPOINT)
