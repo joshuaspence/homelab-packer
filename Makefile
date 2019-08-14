@@ -1,9 +1,9 @@
-FILES      := $(wildcard rootfs/*)
-MOUNTPOINT := mnt
-OS_IMG     := raspian.img
-OS_URL     := https://downloads.raspberrypi.org/raspbian_lite_latest
-OS_ZIP     := raspian.zip
-OUTPUT     ?=
+FILES       := $(wildcard rootfs/*)
+LOOP_DEVICE := /dev/loop0
+MOUNTPOINT  := mnt
+OS_IMG      := raspian.img
+OS_URL      := https://downloads.raspberrypi.org/raspbian_lite_latest
+OS_ZIP      := raspian.zip
 
 #===============================================================================
 # Targets
@@ -23,31 +23,36 @@ clean-all: clean
 .PHONY: download
 download: $(OS_ZIP)
 
+# TODO: Remove this.
 .PHONY: mount
 mount:
 	mkdir $(MOUNTPOINT)
-	mount -o loop,offset=$(shell echo 8192*512 | bc) $(OS_IMG) $(MOUNTPOINT)
+	losetup --partscan $(LOOP_DEVICE) $(OS_IMG)
+	mount $(LOOP_DEVICE)p1 $(MOUNTPOINT)
 
+# TODO: Remove this.
 .PHONY: unmount
 unmount:
 	umount $(MOUNTPOINT)
+	losetup --detach $(LOOP_DEVICE)
 	rmdir $(MOUNTPOINT)
 
 #===============================================================================
 # Rules
 #===============================================================================
 
-$(OS_ZIP):
-	wget --output-document $@ $(OS_URL)
-
 $(OS_IMG): $(OS_ZIP) $(FILES)
 	unzip -p $< > $@
-	fdisk -lu $(OS_IMG)
 	mkdir $(MOUNTPOINT)
-	mount -o loop,offset=$(shell echo 8192*512 | bc) $@ $(MOUNTPOINT)
+	losetup --partscan $(LOOP_DEVICE) $@
+	mount $(LOOP_DEVICE)p1 $(MOUNTPOINT)
 	cp $(filter-out $<,$^) $(MOUNTPOINT)/
 	umount $(MOUNTPOINT)
+	losetup --detach $(LOOP_DEVICE)
 	rmdir $(MOUNTPOINT)
+
+$(OS_ZIP):
+	wget --output-document $@ $(OS_URL)
 
 #===============================================================================
 # TODO
