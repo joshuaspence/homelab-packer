@@ -32,15 +32,16 @@ download: $(OS_ZIP)
 # Rules
 #===============================================================================
 
+# TODO: Check this.
 $(OS_IMG): $(OS_ZIP) $(FILES)
 	unzip -p $< > $@
-	mkdir $(MOUNTPOINT)
+	@mkdir $(MOUNTPOINT)
 	losetup --partscan $(LOOP_DEVICE) $@
 	mount $(LOOP_DEVICE)p1 $(MOUNTPOINT)
 	cp $(filter-out $<,$^) $(MOUNTPOINT)/
 	umount $(MOUNTPOINT)
 	losetup --detach $(LOOP_DEVICE)
-	rmdir $(MOUNTPOINT)
+	@rmdir $(MOUNTPOINT)
 
 $(OS_ZIP):
 	wget --output-document $@ $(OS_URL)
