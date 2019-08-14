@@ -23,14 +23,6 @@ clean-all: clean
 .PHONY: download
 download: $(OS_ZIP)
 
-# TODO: Remove this.
-.PHONY: mount
-mount:
-	mkdir $(MOUNTPOINT)
-	losetup --partscan $(LOOP_DEVICE) $(OS_IMG)
-	mount $(LOOP_DEVICE)p1 $(MOUNTPOINT)
-
-# TODO: Remove this.
 .PHONY: unmount
 unmount:
 	umount $(MOUNTPOINT)
