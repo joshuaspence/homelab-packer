@@ -1,4 +1,4 @@
-FILES       := $(wildcard rootfs/*)
+FILES       := $(wildcard boot/*)
 LOOP_DEVICE := /dev/loop0
 MOUNTPOINT  := mnt
 OS_IMG      := raspian.img
