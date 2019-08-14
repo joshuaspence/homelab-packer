@@ -1,3 +1,6 @@
-/mnt/
+# Generated
 /raspian.img
 /raspian.zip
+
+# Temporary
+/mnt/
