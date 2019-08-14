@@ -28,6 +28,9 @@ clean-all: clean
 .PHONY: download
 download: $(OS_ZIP)
 
+.PHONY: deploy
+deploy:
+
 #===============================================================================
 # Rules
 #===============================================================================
@@ -46,10 +49,5 @@ $(OS_IMG): $(OS_ZIP) $(FILES)
 $(OS_ZIP):
 	wget --output-document $@ $(OS_URL)
 
-#===============================================================================
-# TODO
-#===============================================================================
-
-.PHONY: deploy
-deploy: $(OS_IMG)
-	dd bs=4M if=$< of=$(OUTPUT) status=progress conv=fsync
+/dev/%: $(OS_IMG)
+	dd bs=4M if=$< of=$@ status=progress conv=fsync
