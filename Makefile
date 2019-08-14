@@ -50,9 +50,10 @@ $(OS_IMG): $(OS_ZIP) $(FILES)
 	umount $(MOUNTPOINT)
 	rmdir $(MOUNTPOINT)
 
-
-
+#===============================================================================
+# TODO
+#===============================================================================
 
 .PHONY: deploy
-deploy: raspian.img
+deploy: $(OS_IMG)
 	dd bs=4M if=$< of=$(OUTPUT) status=progress conv=fsync
