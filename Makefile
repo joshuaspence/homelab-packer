@@ -14,12 +14,11 @@ build: $(OS_IMG)
 
 .PHONY: clean
 clean:
-	rm $(OS_IMG)
-	rmdir $(MOUNTPOINT)
+	rm --force --recursive $(MOUNTPOINT) $(OS_IMG)
 
 .PHONY: clean-all
 clean-all: clean
-	rm $(OS_ZIP)
+	rm --force $(OS_ZIP)
 
 .PHONY: download
 download: $(OS_ZIP)
