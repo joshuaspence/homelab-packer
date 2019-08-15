@@ -1,5 +1,5 @@
 FILES       := $(wildcard boot/*)
-LOOP_DEVICE := /dev/loop0
+LOOP_DEVICE := $(shell losetup --find)
 MOUNTPOINT  := mnt
 OS_IMG      := raspian.img
 OS_URL      := https://downloads.raspberrypi.org/raspbian_lite_latest
