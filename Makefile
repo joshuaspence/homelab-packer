@@ -31,6 +31,17 @@ download: $(OS_ZIP)
 .PHONY: deploy
 deploy:
 
+# NOTE: `raspberrypi.local` with mDNS. You can use `avahi-browse` to browse
+# hosts and services on the LAN. See
+# https://www.raspberrypi.org/documentation/remote-access/ip-address.md.
+.PHONY: ping
+ping:
+	ping raspberrypi.local
+
+.PHONY: ssh
+ssh:
+	sshpass -p raspberry ssh pi@raspberrypi.local
+
 #===============================================================================
 # Rules
 #===============================================================================
