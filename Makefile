@@ -47,6 +47,7 @@ ssh:
 #===============================================================================
 
 # TODO: Check this.
+# TODO: `$(MOUNTPOINT)` shouls be deleted on error.
 $(OS_IMG): $(OS_ZIP) $(FILES)
 	unzip -p $< > $@
 	@mkdir $(MOUNTPOINT)
