@@ -29,7 +29,8 @@ clean-all: clean
 download: $(OS_ZIP)
 
 .PHONY: deploy
-deploy:
+deploy: $(OS_IMG)
+	sudo dd bs=4M if=$< of=/dev/sdb status=progress conv=fsync
 
 # NOTE: `raspberrypi.local` with mDNS. You can use `avahi-browse` to browse
 # hosts and services on the LAN. See
