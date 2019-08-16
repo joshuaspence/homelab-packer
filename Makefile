@@ -1,5 +1,5 @@
 FILES       := $(wildcard boot/*)
-LOOP_DEVICE := $(shell losetup --find)
+LOOP_DEVICE := $(shell sudo losetup --find)
 MOUNTPOINT  := mnt
 OS_IMG      := raspian.img
 OS_URL      := https://downloads.raspberrypi.org/raspbian_lite_latest
@@ -50,11 +50,12 @@ ssh:
 $(OS_IMG): $(OS_ZIP) $(FILES)
 	unzip -p $< > $@
 	@mkdir $(MOUNTPOINT)
-	losetup --partscan $(LOOP_DEVICE) $@
-	mount $(LOOP_DEVICE)p1 $(MOUNTPOINT)
+	sudo losetup --partscan $(LOOP_DEVICE) $@
+	sudo mount -o uid=$$USER,gid=$$USER $(LOOP_DEVICE)p1 $(MOUNTPOINT)
 	cp $(filter-out $<,$^) $(MOUNTPOINT)/
-	umount $(MOUNTPOINT)
-	losetup --detach $(LOOP_DEVICE)
+	sync $(MOUNTPOINT)
+	sudo umount $(MOUNTPOINT)
+	sudo losetup --detach $(LOOP_DEVICE)
 	@rmdir $(MOUNTPOINT)
 
 $(OS_ZIP):
