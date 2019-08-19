@@ -25,6 +25,10 @@
       "inline": [
         "wpa_passphrase \"{{user `wifi_name`}}\" \"{{user `wifi_password`}}\"  >> /etc/wpa_supplicant/wpa_supplicant.conf"
       ]
+    },
+    {
+      "type": "shell-local",
+      "command": "ls /"
     }
   ],
   "variables": {
