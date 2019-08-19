@@ -8,13 +8,6 @@
       "output_directory": "build"
     }
   ],
-  "post-processors": [
-    {
-      "type": "flasher",
-      "device": "/dev/sdb",
-      "verify": true
-    }
-  ], 
   "provisioners": [
     {
       "type": "shell",
