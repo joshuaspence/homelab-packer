@@ -41,8 +41,8 @@
     "iso_checksum": "9e5cf24ce483bb96e7736ea75ca422e3560e7b455eee63dd28f66fa1825db70e",
     "iso_url": "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip",
     "target_image_size": 34359738368,
-    "wifi_name": "",
-    "wifi_password": ""
+    "wifi_name": null,
+    "wifi_password": null
   },
   "sensitive-variables": ["wifi_password"]
 }
