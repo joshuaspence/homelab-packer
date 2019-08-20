@@ -34,10 +34,6 @@
 	"sudo raspi-config nonint do_change_timezone Australia/Sydney",
         "sudo raspi-config nonint do_wifi_country AU"
       ]
-    },
-    {
-      "type": "shell-local",
-      "command": "ls /"
     }
   ],
   "variables": {
