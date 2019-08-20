@@ -46,5 +46,6 @@
     "target_image_size": 34359738368,
     "wifi_name": "",
     "wifi_password": ""
-  }
+  },
+  "sensitive-variables": ["wifi_password"]
 }
