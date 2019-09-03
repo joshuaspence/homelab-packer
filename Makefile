@@ -21,7 +21,7 @@ deploy:
 
 KPARTX := sudo kpartx
 MOUNT  := sudo mount
-UMOUNT := sudo umount
+UMOUNT := sudo umount --recursive
 
 # TODO: Do we need to copy `qemu-arm-static`?
 .PHONY: chroot
@@ -37,10 +37,6 @@ chroot:
 	sudo chroot $(TARGET)
 	sudo sed --in-place 's/^#CHROOT //g' $(TARGET)/etc/ld.so.preload
 
-	$(UMOUNT) $(TARGET)/dev/pts
-	$(UMOUNT) $(TARGET)/dev
-	$(UMOUNT) $(TARGET)/proc
-	$(UMOUNT) $(TARGET)/sys
 	$(MAKE) unmount
 
 # TODO: Ensure that `$(SOURCE)` and `$(TARGET)` are set.
@@ -57,10 +53,8 @@ mount:
 	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(TARGET)/boot
 
 # TODO: Ensure that `$(SOURCE)` and `$(TARGET)` are set.
-# TODO: Can we use `umount --recursive`?
 .PHONY: unmount
 unmount:
-	$(UMOUNT) $(TARGET)/boot
 	$(UMOUNT) $(TARGET)
 	rmdir $(TARGET) 
 	$(KPARTX) -d $(SOURCE)
