@@ -34,7 +34,7 @@ chroot:
 
 	sudo sed --in-place 's/^/#CHROOT /g' $(TARGET)/etc/ld.so.preload
 	sudo cp /usr/bin/qemu-arm-static  $(TARGET)/usr/bin/
-	sudo chroot $(TARGET) /bin/bash
+	sudo chroot $(TARGET)
 	sudo sed --in-place 's/^#CHROOT //g' $(TARGET)/etc/ld.so.preload
 
 	$(UMOUNT) $(TARGET)/dev/pts
