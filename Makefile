@@ -24,9 +24,14 @@ MAKEFLAGS += --no-print-directory
 MOUNT     := sudo mount
 UMOUNT    := sudo umount --recursive
 
+check_defined = $(strip $(foreach 1,$1,$(call __check_defined,$1,$(strip $(value 2)))))
+__check_defined = $(if $(value $1),,$(error Undefined $1$(if $2, ($2))$(if $(value @), required by target `$@')))
+
 # TODO: Do we need to copy `qemu-arm-static`?
 .PHONY: chroot
 chroot:
+	$(call check_defined,SOURCE TARGET)
+
 	$(MAKE) mount
 	$(MOUNT) --bind /dev $(TARGET)/dev
 	$(MOUNT) --bind /dev/pts $(TARGET)/dev/pts
@@ -40,10 +45,11 @@ chroot:
 
 	$(MAKE) unmount
 
-# TODO: Ensure that `$(SOURCE)` and `$(TARGET)` are set.
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
 .PHONY: mount
 mount:
+	$(call check_defined,SOURCE TARGET)
+
 	# Create a device map.
 	$(KPARTX) -a -s $(SOURCE)
 	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(SOURCE) | cut --delimiter=' ' --fields=1)))
@@ -53,9 +59,9 @@ mount:
 	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(TARGET)
 	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(TARGET)/boot
 
-# TODO: Ensure that `$(SOURCE)` and `$(TARGET)` are set.
 .PHONY: unmount
 unmount:
+	$(call check_defined,SOURCE TARGET)
 	$(UMOUNT) $(TARGET)
 	rmdir $(TARGET) 
 	$(KPARTX) -d $(SOURCE)
