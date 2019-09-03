@@ -19,9 +19,10 @@ deploy:
 # Manual Targets
 #===============================================================================
 
-KPARTX := sudo kpartx
-MOUNT  := sudo mount
-UMOUNT := sudo umount --recursive
+KPARTX    := sudo kpartx
+MAKEFLAGS += --no-print-directory
+MOUNT     := sudo mount
+UMOUNT    := sudo umount --recursive
 
 # TODO: Do we need to copy `qemu-arm-static`?
 .PHONY: chroot
