@@ -45,17 +45,16 @@ chroot:
 
 # TODO: Ensure that `$(SOURCE)` and `$(TARGET)` are set.
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
-# TODO: Use `make` functions instead of `cut`, `sed`, `sort` and `uniq`.
 .PHONY: mount
 mount:
 	# Create a device map.
 	$(KPARTX) -a -s $(SOURCE)
-	$(eval LOOP_DEVICE := $(shell $(KPARTX) -l $(SOURCE) | cut --delimiter=' ' --fields=5 | sort | uniq | sed 's|^/dev/|/dev/mapper/|'))
+	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(SOURCE) | cut --delimiter=' ' --fields=1)))
 
 	# Mount partitions.
 	mkdir $(TARGET)
-	$(MOUNT) $(LOOP_DEVICE)p2 $(TARGET)
-	$(MOUNT) $(LOOP_DEVICE)p1 $(TARGET)/boot
+	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(TARGET)
+	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(TARGET)/boot
 
 # TODO: Ensure that `$(SOURCE)` and `$(TARGET)` are set.
 # TODO: Can we use `umount --recursive`?
