@@ -21,18 +21,18 @@
     {
       "type": "shell",
       "inline": [
-        "sudo apt-get --quiet update",
-        "sudo apt-get --quiet --yes upgrade",
-        "sudo apt-get --quiet --yes dist-upgrade",
-        "sudo apt-get --quiet clean"
+        "apt-get --quiet update",
+        "apt-get --quiet --yes upgrade",
+        "apt-get --quiet --yes dist-upgrade",
+        "apt-get --quiet clean"
       ]
     },
 
     {
       "type": "shell",
       "inline": [
-	"sudo raspi-config nonint do_change_timezone Australia/Sydney",
-        "sudo raspi-config nonint do_wifi_country AU"
+	"raspi-config nonint do_change_timezone Australia/Sydney",
+        "raspi-config nonint do_wifi_country AU"
       ]
     },
     {
@@ -50,7 +50,7 @@
     },
     {
       "type": "shell",
-      "inline": ["curl --location --show-error --silent https://get.docker.com | sudo sh"]
+      "inline": ["curl --location --show-error --silent https://get.docker.com | sh"]
     }
   ],
   "variables": {
