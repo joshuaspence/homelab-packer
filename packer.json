@@ -31,8 +31,7 @@
     {
       "type": "shell",
       "inline": [
-	"raspi-config nonint do_change_timezone Australia/Sydney",
-        "raspi-config nonint do_wifi_country AU"
+	"raspi-config nonint do_change_timezone Australia/Sydney"
       ]
     },
     {
