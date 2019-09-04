@@ -35,6 +35,10 @@
       "type": "shell",
       "inline": ["wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"]
     },
+
+
+
+
     {
       "type": "shell",
       "inline": [
@@ -42,6 +46,27 @@
         "usermod --append --groups docker pi"
       ]
     },
+    {
+      "type": "shell",
+      "inline": [
+	"# Installing Kubernetes",
+        "curl --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -",
+	"echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list",
+	"apt-get --quiet update",
+	"apt-get --quiet --yes install kubeadm kubectl",
+
+        "# Disable swap",
+        "dphys-swapfile swapoff",
+        "dphys-swapfile uninstall",
+        "update-rc.d dphys-swapfile remove",
+
+	"# Enable cgroups",
+	"sed --expression 's/$/ cgroup_enable=cpuset cgroup_enable=memory/' --in-place /boot/cmdline.txt"
+      ]
+    },
+
+
+
 
     {
       "type": "file",
