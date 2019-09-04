@@ -50,7 +50,10 @@
     },
     {
       "type": "shell",
-      "inline": ["curl --location --show-error --silent https://get.docker.com | sh"]
+      "inline": [
+        "curl --location --show-error --silent https://get.docker.com | sh",
+	"usermod --append --groups docker pi"
+      ]
     }
   ],
   "variables": {
