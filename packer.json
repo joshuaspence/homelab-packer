@@ -21,10 +21,10 @@
     {
       "type": "shell",
       "inline": [
-        "sudo apt-get update",
-        "sudo apt-get --yes upgrade",
-        "sudo apt-get --yes dist-upgrade",
-        "sudo apt-get clean"
+        "sudo apt-get --quiet update",
+        "sudo apt-get --quiet --yes upgrade",
+        "sudo apt-get --quiet --yes dist-upgrade",
+        "sudo apt-get --quiet clean"
       ]
     },
     {
