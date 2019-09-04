@@ -3,8 +3,8 @@
     {
       "type": "arm-image",
       "iso_url": "{{user `iso_url`}}",
-      "iso_checksum_type": "sha256",
       "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "sha256",
       "output_directory": "build",
       "target_image_size": "{{user `target_image_size`}}"
     }
@@ -16,9 +16,7 @@
     },
     {
       "type": "shell",
-      "inline": [
-        "wpa_passphrase \"{{user `wifi_name`}}\" \"{{user `wifi_password`}}\"  >> /etc/wpa_supplicant/wpa_supplicant.conf"
-      ]
+      "inline": ["wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"]
     },
     {
       "type": "shell",
