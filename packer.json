@@ -35,6 +35,13 @@
       "type": "shell",
       "inline": ["wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"]
     },
+    {
+      "type": "shell",
+      "inline": [
+        "curl --location --show-error --silent https://get.docker.com | sh",
+        "usermod --append --groups docker pi"
+      ]
+    },
 
     {
       "type": "file",
@@ -47,13 +54,6 @@
         "sed '/PasswordAuthentication/d' -i /etc/ssh/ssh_config",
         "echo >> /etc/ssh/ssh_config",
         "echo 'PasswordAuthentication no' >> /etc/ssh/ssh_config"
-      ]
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "curl --location --show-error --silent https://get.docker.com | sh",
-	"usermod --append --groups docker pi"
       ]
     }
   ],
