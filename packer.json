@@ -22,8 +22,8 @@
     {
       "type": "shell",
       "inline": [
-	"test -f /usr/share/zoneinfo/{{user `timezone`}}",
-	"echo '{{user `timezone`}}' > /etc/timezone",
+        "test -f /usr/share/zoneinfo/{{user `timezone`}}",
+        "echo '{{user `timezone`}}' > /etc/timezone",
         "dpkg-reconfigure --frontend noninteractive tzdata"
       ]
     },
@@ -49,19 +49,19 @@
     {
       "type": "shell",
       "inline": [
-	"# Installing Kubernetes",
+        "# Installing Kubernetes",
         "curl --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -",
-	"echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list",
-	"apt-get --quiet update",
-	"apt-get --quiet --yes install kubeadm kubectl",
+        "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list",
+        "apt-get --quiet update",
+        "apt-get --quiet --yes install kubeadm kubectl",
 
         "# Disable swap",
         "dphys-swapfile swapoff",
         "dphys-swapfile uninstall",
-        "update-rc.d dphys-swapfile remove",
+        "systemctl disable dphys-swapfile",
 
-	"# Enable cgroups",
-	"sed --expression 's/$/ cgroup_enable=cpuset cgroup_enable=memory/' --in-place /boot/cmdline.txt"
+        "# Enable cgroups",
+        "sed --expression 's/$/ cgroup_enable=cpuset cgroup_enable=memory/' --in-place /boot/cmdline.txt"
       ]
     },
 
