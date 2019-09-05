@@ -15,6 +15,13 @@ clean-all: clean
 deploy:
 	sudo flasher --device /dev/sdb --image build/image --verify
 
+qemu/arm-linux-user/qemu-arm:
+	sudo apt-get --quiet --yes build-dep qemu
+	wget -qO- https://download.qemu.org/qemu-4.1.0.tar.xz | tar xJf -
+	mv qemu-4.1.0 qemu
+	cd qemu && ./configure --static --disable-system --enable-linux-user
+	cd qemu && make -j8
+
 #===============================================================================
 # Manual Targets
 #===============================================================================
@@ -39,10 +46,10 @@ chroot:
 	$(MOUNT) --bind /proc $(TARGET)/proc
 	$(MOUNT) --bind /sys $(TARGET)/sys
 
-	sudo sed --in-place 's/^/#CHROOT /g' $(TARGET)/etc/ld.so.preload
-	sudo cp /usr/bin/qemu-arm-static  $(TARGET)/usr/bin/
+	sudo cp qemu/arm-linux-user/qemu-arm $(TARGET)/usr/bin/qemu-arm-static
+	sudo chown root:root $(TARGET)/usr/bin/qemu-arm-static
+
 	sudo chroot $(TARGET)
-	sudo sed --in-place 's/^#CHROOT //g' $(TARGET)/etc/ld.so.preload
 
 	$(MAKE) unmount
 
