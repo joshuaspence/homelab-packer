@@ -67,7 +67,10 @@
 
 
 
-
+    {
+      "type": "shell",
+      "inline": ["mkdir /home/pi/.ssh"]
+    },
     {
       "type": "file",
       "source": "{{user `ssh_authorized_keys_path`}}",
