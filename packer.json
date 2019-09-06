@@ -23,7 +23,8 @@
       "type": "shell",
       "inline": [
         "test -f /usr/share/zoneinfo/{{user `timezone`}}",
-        "timedatectl set-timezone '{{user `timezone`}}'"
+        "echo '{{user `timezone`}}' > /etc/timezone",
+        "dpkg-reconfigure --frontend noninteractive tzdata"
       ]
     },
     {
