@@ -13,7 +13,8 @@ clean-all: clean
 # TODO: Move this to a `post-processor` in `packer.json`.
 .PHONY: deploy
 deploy:
-	sudo flasher --device /dev/sdb --image build/image --verify
+	$(call check_defined,DEVICE)
+	sudo flasher --device $(DEVICE) --image build/image --verify
 
 qemu/arm-linux-user/qemu-arm-static:
 	sudo apt-get --quiet --yes build-dep qemu
