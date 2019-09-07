@@ -13,10 +13,10 @@
     {
       "type": "shell",
       "inline": [
-        "apt-get --quiet update",
-        "apt-get --quiet --yes upgrade",
-        "apt-get --quiet --yes dist-upgrade",
-        "apt-get --quiet clean"
+        "apt-get update",
+        "apt-get --yes upgrade",
+        "apt-get --yes dist-upgrade",
+        "apt-get clean"
       ]
     },
     {
