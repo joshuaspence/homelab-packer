@@ -63,32 +63,11 @@
         "# Enable cgroups",
         "sed --expression 's/$/ cgroup_enable=cpuset cgroup_enable=memory/' --in-place /boot/cmdline.txt"
       ]
-    },
-
-
-
-    {
-      "type": "shell",
-      "inline": ["mkdir /home/pi/.ssh"]
-    },
-    {
-      "type": "file",
-      "source": "{{user `ssh_authorized_keys_path`}}",
-      "destination": "/home/pi/.ssh/authorized_keys"
-    },
-    {
-      "type": "shell",
-      "inline": [
-        "sed '/PasswordAuthentication/d' -i /etc/ssh/ssh_config",
-        "echo >> /etc/ssh/ssh_config",
-        "echo 'PasswordAuthentication no' >> /etc/ssh/ssh_config"
-      ]
     }
   ],
   "variables": {
     "iso_checksum": "9e5cf24ce483bb96e7736ea75ca422e3560e7b455eee63dd28f66fa1825db70e",
     "iso_url": "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip",
-    "ssh_authorized_keys_path": null,
     "target_image_size": "34359738368",
     "timezone": "Australia/Sydney",
     "wifi_name": null,
