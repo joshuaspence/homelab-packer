@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	sudo packer build -var-file variables.json $(PACKER_OPTS) packer.json
+	sudo packer build -var-file config.json $(PACKER_OPTS) packer.json
 
 .PHONY: clean
 clean:
