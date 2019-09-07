@@ -1,6 +1,8 @@
+# Configuration
+/variables.json
+
 # Generated
-/raspian.img
-/raspian.zip
+/build/
 
 # Temporary
-/mnt/
+/packer_cache/
