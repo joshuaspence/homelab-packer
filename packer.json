@@ -18,6 +18,10 @@
         "apt-get --yes dist-upgrade",
         "apt-get --yes auto-remove",
         "apt-get clean"
+      ],
+      "environment_vars": [
+        "LANG=",
+        "LANGUAGE="
       ]
     },
     {
