@@ -65,18 +65,22 @@
         "LANGUAGE="
       ]
     },
+    {
+      "type": "shell",
+      "inline": [
+        "# Install Kubernetes",
+        "curl --fail --show-error --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -",
+        "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list",
+        "apt-get update",
+        "apt-get --yes install --no-install-recommends kubeadm kubectl"
+      ]
+    },
 
 
 
     {
       "type": "shell",
       "inline": [
-        "# Installing Kubernetes",
-        "curl --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -",
-        "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list",
-        "apt-get --quiet update",
-        "apt-get --quiet --yes install kubeadm kubectl",
-
         "# Disable swap",
         "dphys-swapfile swapoff",
         "dphys-swapfile uninstall",
