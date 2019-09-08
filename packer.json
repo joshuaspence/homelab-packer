@@ -28,6 +28,14 @@
     {
       "type": "shell",
       "inline": [
+        "HOSTNAME=$(cat /etc/hostname)",
+        "echo {{user `hostname`}} > /etc/hostname",
+        "sed --expression \"s/^127\\.0\\.1\\.1\\s\\+${HOSTNAME}$/127.0.1.1\t{{user `hostname`}}/g\" --in-place /etc/hosts"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
         "# Change timezone",
         "test -f /usr/share/zoneinfo/{{user `timezone`}}",
         "ln --force --symbolic /usr/share/zoneinfo/{{user `timezone`}} /etc/localtime",
@@ -92,6 +100,7 @@
     }
   ],
   "variables": {
+    "hostname": "raspberrypi",
     "iso_url": "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip",
     "target_image_size": "34359738368",
     "timezone": "Australia/Sydney",
