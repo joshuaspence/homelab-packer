@@ -28,8 +28,13 @@
       "type": "shell",
       "inline": [
         "test -f /usr/share/zoneinfo/{{user `timezone`}}",
-        "echo '{{user `timezone`}}' > /etc/timezone",
+        "ln --force --symbolic /usr/share/zoneinfo/{{user `timezone`}} /etc/localtime",
+        "echo {{user `timezone`}} > /etc/timezone",
         "dpkg-reconfigure --frontend noninteractive tzdata"
+      ],
+      "environment_vars": [
+        "LANG=",
+        "LANGUAGE="
       ]
     },
     {
