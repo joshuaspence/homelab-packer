@@ -13,8 +13,9 @@ clean-all: clean
 # TODO: Move this to a `post-processor` in `packer.json`.
 .PHONY: deploy
 deploy:
+	# TODO: Optionally add `--verify`
 	$(call check_defined,DEVICE)
-	sudo flasher --device $(DEVICE) --image build/image --verify
+	sudo flasher --device $(DEVICE) --image build/image
 
 qemu/arm-linux-user/qemu-arm-static:
 	sudo apt-get --quiet --yes build-dep qemu
