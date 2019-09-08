@@ -13,6 +13,7 @@
     {
       "type": "shell",
       "inline": [
+        "# Upgrade system packages",
         "apt-get update",
         "apt-get --yes upgrade",
         "apt-get --yes dist-upgrade",
@@ -27,6 +28,7 @@
     {
       "type": "shell",
       "inline": [
+        "# Change timezone",
         "test -f /usr/share/zoneinfo/{{user `timezone`}}",
         "ln --force --symbolic /usr/share/zoneinfo/{{user `timezone`}} /etc/localtime",
         "echo {{user `timezone`}} > /etc/timezone",
@@ -39,11 +41,17 @@
     },
     {
       "type": "shell",
-      "inline": ["touch /boot/ssh"]
+      "inline": [
+        "# Enable SSH",
+        "touch /boot/ssh"
+      ]
     },
     {
       "type": "shell",
-      "inline": ["wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"]
+      "inline": [
+        "# Configure Wi-Fi",
+        "wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"
+      ]
     },
 
 
