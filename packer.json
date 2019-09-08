@@ -53,17 +53,21 @@
         "wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"
       ]
     },
-
-
-
-
     {
       "type": "shell",
       "inline": [
-        "curl --location --show-error --silent https://get.docker.com | sh",
+        "# Install Docker",
+        "curl --fail --location --show-error --silent https://get.docker.com | sh",
         "usermod --append --groups docker pi"
+      ],
+      "environment_vars": [
+        "LANG=",
+        "LANGUAGE="
       ]
     },
+
+
+
     {
       "type": "shell",
       "inline": [
