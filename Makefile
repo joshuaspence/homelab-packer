@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	sudo packer build -var-file config.json $(PACKER_OPTS) packer.json
+	cat packer.yaml | yaml2json | sudo packer build -var-file config.json $(PACKER_OPTS) -
 
 .PHONY: clean
 clean:
@@ -76,5 +76,5 @@ mount:
 unmount:
 	$(call check_defined,SOURCE TARGET)
 	$(UMOUNT) $(TARGET)
-	rmdir $(TARGET) 
+	rmdir $(TARGET)
 	$(KPARTX) -d $(SOURCE)
