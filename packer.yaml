@@ -68,6 +68,12 @@ provisioners:
 
       # Enable cgroups
       - "sed --expression 's/$/ cgroup_enable=cpuset cgroup_enable=memory/' --in-place /boot/cmdline.txt"
+
+  - type: 'shell'
+    inline:
+      - 'rm /var/cache/apt/archives/*.deb'
+      - 'rm /var/cache/apt/archives/partial/*'
+      - 'rm /var/log/*.log'
 variables:
   hostname: 'raspberrypi'
   iso_url: 'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip'
