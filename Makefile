@@ -25,7 +25,7 @@ qemu/arm-linux-user/qemu-arm-static:
 	cd qemu && make -j8
 	mv qemu/arm-linux-user/qemu-arm qemu/arm-linux-user/qemu-arm-static
 
-export PATH := qemu/arm-linux-user:$(PATH)
+export PATH := $(CURDIR)/qemu/arm-linux-user:$(PATH)
 
 #===============================================================================
 # Manual Targets
