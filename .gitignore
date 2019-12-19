@@ -3,6 +3,7 @@
 
 # Generated
 /build/
+/qemu/
 
 # Temporary
 /packer_cache/
