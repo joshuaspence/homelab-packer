@@ -5,6 +5,7 @@ builders:
     iso_checksum_url: '{{user `iso_url`}}.sha256'
     iso_checksum_type: 'sha256'
     output_directory: 'build'
+    qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
     target_image_size: '{{user `target_image_size`}}'
 provisioners:
   # Upgrade system packages
@@ -71,9 +72,9 @@ provisioners:
 
   - type: 'shell'
     inline:
-      - 'rm /var/cache/apt/archives/*.deb'
-      - 'rm /var/cache/apt/archives/partial/*'
-      - 'rm /var/log/*.log'
+      - 'rm --force /var/cache/apt/archives/*.deb'
+      - 'rm --force /var/cache/apt/archives/partial/*'
+      - 'rm --force /var/log/*.log'
 variables:
   hostname: 'raspberrypi'
   iso_url: 'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip'
