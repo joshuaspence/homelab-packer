@@ -77,12 +77,12 @@ provisioners:
       - 'rm --force /var/log/*.log'
 variables:
   hostname: 'raspberrypi'
-  iso_url: 'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip'
   target_image_size: '34359738368'
   timezone: 'Australia/Sydney'
   wifi_name: null
   wifi_password: null
+
+  # NOTE: This comes from https://downloads.raspberrypi.org/raspbian_lite_latest.
+  iso_url: 'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-09-30/2019-09-26-raspbian-buster-lite.zip'
 sensitive-variables:
   - 'wifi_password'
-
-
