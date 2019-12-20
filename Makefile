@@ -1,5 +1,5 @@
 .PHONY: build
-build:
+build: build/raspian.zip qemu/arm-linux-user/qemu-arm-static
 	cat packer.yaml | yaml2json | sudo packer build -var-file config.json $(PACKER_OPTS) -
 
 .PHONY: clean
@@ -78,3 +78,7 @@ unmount:
 	$(UMOUNT) $(TARGET)
 	rmdir $(TARGET)
 	$(KPARTX) -d $(SOURCE)
+
+.DELETE_ON_ERROR:
+build/raspian.zip:
+	wget --output-document=build/raspian.zip https://downloads.raspberrypi.org/raspbian_lite_latest
