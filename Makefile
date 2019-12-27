@@ -80,5 +80,8 @@ unmount:
 	$(KPARTX) -d $(SOURCE)
 
 .DELETE_ON_ERROR:
+.ONESHELL:
 build/raspian.zip:
-	wget --output-document=build/raspian.zip https://downloads.raspberrypi.org/raspbian_lite_latest
+	RASPIAN_URL=$$(curl --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspbian_lite_latest)
+	curl --silent $$RASPIAN_URL.sha256 | awk '{print $$1}' > $@.sha256
+	curl --output $@ --progress-bar $$RASPIAN_URL
