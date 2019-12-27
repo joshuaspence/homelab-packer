@@ -23,6 +23,14 @@ provisioners:
       - 'APT_LISTCHANGES_FRONTEND=none'
       - 'LC_ALL=C'
 
+  # Install Docker.
+  - type: 'shell'
+    inline:
+      - 'curl --fail --location --show-error --silent https://get.docker.com | sh'
+      - 'usermod --append --groups docker pi'
+    inline_shebang: *shebang
+    environment_vars: *env
+
   # Cleanup.
   - type: 'shell'
     inline:
