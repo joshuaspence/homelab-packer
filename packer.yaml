@@ -31,6 +31,16 @@ provisioners:
     inline_shebang: *shebang
     environment_vars: *env
 
+  # Install Kubernetes.
+  - type: 'shell'
+    inline:
+      - 'curl --fail --show-error --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -'
+      - 'echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
+      - 'apt-get --quiet update'
+      - 'apt-get --no-install-recommends --quiet --yes install kubeadm kubectl kubelet'
+    inline_shebang: *shebang
+    environment_vars: *env
+
   # Cleanup.
   - type: 'shell'
     inline:
