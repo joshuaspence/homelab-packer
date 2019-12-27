@@ -5,8 +5,8 @@ builders:
     iso_target_extension: 'img'
     output_filename: 'build/raspberry_pi.img'
     image_type: 'raspberrypi'
-    qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
     target_image_size: '{{user `target_image_size`}}'
+    qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
 
     # TODO: Point `iso_url` and `iso_checksum_url` to HTTPS URLs instead of local files.
     iso_url: 'file::build/raspian.zip'
@@ -81,9 +81,11 @@ provisioners:
       - 'rm --force /var/log/*.log'
 variables:
   hostname: 'raspberrypi'
-  target_image_size: '34359738368'
   timezone: 'Australia/Sydney'
   wifi_name: null
   wifi_password: null
+
+  # TODO: Check this.
+  target_image_size: '34359738368'
 sensitive-variables:
   - 'wifi_password'
