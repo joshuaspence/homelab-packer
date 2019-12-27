@@ -11,6 +11,12 @@ builders:
     # TODO: Point `iso_url` and `iso_checksum_url` to HTTPS URLs instead of local files.
     iso_url: 'file::build/raspian.zip'
     iso_checksum_url: 'file::build/raspian.zip.sha256'
+provisioners:
+  # Upgrade system packages.
+  - type: 'shell'
+    inline:
+      - 'apt-get --quiet update'
+    inline_shebang: &shebang '/bin/sh -eux'
 variables:
   hostname: 'raspberrypi'
   timezone: 'Australia/Sydney'
