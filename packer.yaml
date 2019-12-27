@@ -18,7 +18,8 @@ provisioners:
       - 'apt-get --quiet update'
       - 'apt-get --quiet --yes upgrade'
     inline_shebang: &shebang '/bin/sh -eux'
-    environment_vars: &locale
+    environment_vars: &env
+      - 'APT_LISTCHANGES_FRONTEND=none'
       - 'LC_ALL=C'
 variables:
   hostname: 'raspberrypi'
