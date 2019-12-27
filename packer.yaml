@@ -4,13 +4,13 @@ builders:
     iso_checksum_type: 'sha256'
     iso_target_extension: 'img'
     output_filename: 'build/raspberry_pi.img'
+    image_type: 'raspberrypi'
     qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
     target_image_size: '{{user `target_image_size`}}'
 
     # TODO: Point `iso_url` and `iso_checksum_url` to HTTPS URLs instead of local files.
     iso_url: 'file::build/raspian.zip'
     iso_checksum_url: 'file::build/raspian.zip.sha256'
-    image_type: 'raspberrypi'
 provisioners:
   # Upgrade system packages
   - type: 'shell'
