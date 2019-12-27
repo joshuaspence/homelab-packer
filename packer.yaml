@@ -16,6 +16,7 @@ provisioners:
   - type: 'shell'
     inline:
       - 'apt-get --quiet update'
+      - 'apt-get --quiet --yes upgrade'
     inline_shebang: &shebang '/bin/sh -eux'
 variables:
   hostname: 'raspberrypi'
