@@ -22,6 +22,14 @@ provisioners:
     environment_vars: &env
       - 'APT_LISTCHANGES_FRONTEND=none'
       - 'LC_ALL=C'
+
+  # Cleanup.
+  - type: 'shell'
+    inline:
+      - 'apt-get --quiet --yes autoremove'
+      - 'apt-get --quiet clean'
+    inline_shebang: *shebang
+    environment_vars: *env
 variables:
   hostname: 'raspberrypi'
   timezone: 'Australia/Sydney'
