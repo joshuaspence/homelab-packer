@@ -3,7 +3,7 @@ builders:
   - type: 'arm-image'
     iso_checksum_type: 'sha256'
     iso_target_extension: 'img'
-    output_directory: 'build'
+    output_filename: 'build/raspberry_pi.img'
     qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
     target_image_size: '{{user `target_image_size`}}'
 
