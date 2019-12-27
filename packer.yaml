@@ -1,6 +1,7 @@
 ---
 builders:
   - type: 'arm-image'
+    iso_target_extension: 'img'
     output_directory: 'build'
     qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
     target_image_size: '{{user `target_image_size`}}'
