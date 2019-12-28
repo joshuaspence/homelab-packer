@@ -21,6 +21,18 @@ provisioners:
       - 'sed --expression "s/^\\(127\\.0\\.1\\.1\\s\\+\\)${HOSTNAME}$/\\1{{user `hostname`}}/g" --in-place /etc/hosts'
     inline_shebang: &shebang '/bin/sh -eux'
 
+  # Change timezone.
+  - type: 'shell'
+    inline:
+      - 'test -f /usr/share/zoneinfo/{{user `timezone`}}'
+      - 'rm /etc/localtime'
+      - 'echo {{user `timezone`}} > /etc/timezone'
+      - 'dpkg-reconfigure --frontend noninteractive tzdata'
+    inline_shebang: *shebang
+    environment_vars: &env
+      - 'APT_LISTCHANGES_FRONTEND=none'
+      - 'LC_ALL=C'
+
   # Upgrade system packages.
   - type: 'shell'
     inline:
@@ -28,9 +40,7 @@ provisioners:
       - 'apt-get --quiet --yes upgrade'
       - 'apt-get --quiet --yes dist-upgrade'
     inline_shebang: *shebang
-    environment_vars: &env
-      - 'APT_LISTCHANGES_FRONTEND=none'
-      - 'LC_ALL=C'
+    environment_vars: *env
 
   # Install Docker.
   - type: 'shell'
