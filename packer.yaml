@@ -34,6 +34,11 @@ provisioners:
   # Install Kubernetes.
   - type: 'shell'
     inline:
+      # Disable swap.
+      - 'dphys-swapfile swapoff'
+      - 'dphys-swapfile uninstall'
+      - 'systemctl disable dphys-swapfile'
+
       - 'curl --fail --show-error --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -'
       - 'echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
       - 'apt-get --quiet update'
