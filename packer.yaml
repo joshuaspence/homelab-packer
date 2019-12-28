@@ -35,12 +35,16 @@ provisioners:
   - type: 'shell'
     inline:
       # Disable swap.
+      - 'swapon --summary'
       - 'dphys-swapfile swapoff'
       - 'dphys-swapfile uninstall'
       - 'systemctl disable dphys-swapfile'
+      - 'swapon --summary'
 
       # Enable cgroups.
+      - 'cat /boot/cmdline.txt'
       - "sed --expression 's/$/ cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory/' --in-place /boot/cmdline.txt"
+      - 'cat /boot/cmdline.txt'
 
       # Install Kubernetes.
       - 'curl --fail --show-error --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -'
