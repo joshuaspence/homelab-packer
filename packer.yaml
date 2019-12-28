@@ -12,13 +12,22 @@ builders:
     iso_url: 'file::build/raspian.zip'
     iso_checksum_url: 'file::build/raspian.zip.sha256'
 provisioners:
+  - type: 'shell'
+    inline:
+      - 'HOSTNAME=$(cat /etc/hostname)'
+      - 'echo {{user `hostname`}} > /etc/hostname'
+
+      # TODO: Make `sed` fail on no match, see https://stackoverflow.com/questions/15965073/return-code-of-sed-for-no-match.
+      - 'sed --expression "s/^\\(127\\.0\\.1\\.1\\s\\+\\)${HOSTNAME}$/\\1{{user `hostname`}}/g" --in-place /etc/hosts'
+    inline_shebang: &shebang '/bin/sh -eux'
+
   # Upgrade system packages.
   - type: 'shell'
     inline:
       - 'apt-get --quiet update'
       - 'apt-get --quiet --yes upgrade'
       - 'apt-get --quiet --yes dist-upgrade'
-    inline_shebang: &shebang '/bin/sh -eux'
+    inline_shebang: *shebang
     environment_vars: &env
       - 'APT_LISTCHANGES_FRONTEND=none'
       - 'LC_ALL=C'
