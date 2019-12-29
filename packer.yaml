@@ -30,7 +30,6 @@ provisioners:
       - 'dpkg-reconfigure --frontend noninteractive tzdata'
     inline_shebang: *shebang
     environment_vars: &env
-      - 'APT_LISTCHANGES_FRONTEND=none'
       - 'LC_ALL=C'
 
   # Enable SSH.
@@ -44,6 +43,14 @@ provisioners:
     inline:
       - 'wpa_passphrase "{{user `wifi_name`}}" "{{user `wifi_password`}}" >> /etc/wpa_supplicant/wpa_supplicant.conf'
     inline_shebang: *shebang
+
+  # Disable Debian changelogs.
+  - type: 'shell'
+    inline:
+      - 'rm /etc/apt/apt.conf.d/20listchanges'
+      - 'apt-get remove --quiet --yes --purge apt-listchanges'
+    inline_shebang: *shebang
+    environment_vars: *env
 
   # Upgrade system packages.
   - type: 'shell'
