@@ -33,6 +33,12 @@ provisioners:
       - 'APT_LISTCHANGES_FRONTEND=none'
       - 'LC_ALL=C'
 
+  # Enable SSH.
+  - type: 'shell'
+    inline:
+      - 'touch /boot/ssh'
+    inline_shebang: *shebang
+
   # Upgrade system packages.
   - type: 'shell'
     inline:
