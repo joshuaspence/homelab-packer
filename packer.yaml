@@ -39,6 +39,12 @@ provisioners:
       - 'touch /boot/ssh'
     inline_shebang: *shebang
 
+  # Configure Wi-Fi.
+  - type: 'shell'
+    inline:
+      - 'wpa_passphrase "{{user `wifi_name`}}" "{{user `wifi_password`}}" >> /etc/wpa_supplicant/wpa_supplicant.conf'
+    inline_shebang: *shebang
+
   # Upgrade system packages.
   - type: 'shell'
     inline:
