@@ -5,5 +5,5 @@
 /build/
 /qemu/
 
-# Temporary
+# Packer
 /packer_cache/
