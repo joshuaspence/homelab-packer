@@ -100,11 +100,9 @@ provisioners:
     environment_vars: *env
 variables:
   hostname: 'raspberrypi'
+  target_image_size: '34359738368'
   timezone: 'Australia/Sydney'
   wifi_name: null
   wifi_password: null
-
-  # TODO: Check this.
-  target_image_size: '34359738368'
 sensitive-variables:
   - 'wifi_password'
