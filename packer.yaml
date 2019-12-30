@@ -1,4 +1,6 @@
 ---
+min_packer_version: '1.4.5'
+
 builders:
   - type: 'arm-image'
     iso_checksum_type: 'sha256'
@@ -11,6 +13,7 @@ builders:
     # TODO: Point `iso_url` and `iso_checksum_url` to HTTPS URLs instead of local files.
     iso_url: 'file::build/raspian.zip'
     iso_checksum_url: 'file::build/raspian.zip.sha256'
+
 provisioners:
   - type: 'shell'
     inline:
@@ -98,6 +101,7 @@ provisioners:
       - 'find /var/log -type f -print0 | xargs --null truncate --size=0'
     inline_shebang: *shebang
     environment_vars: *env
+
 variables:
   hostname: 'raspberrypi'
   target_image_size: '34359738368'
