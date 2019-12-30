@@ -24,7 +24,6 @@ provisioners:
     destination: '/lib/systemd/system/raspberrypi-hostname.service'
   - type: 'shell'
     inline:
-      - 'chmod 644 /etc/hosts /lib/systemd/system/raspberrypi-hostname.service'
       - 'systemctl enable raspberrypi-hostname.service'
     inline_shebang: &shebang '/bin/sh -eux'
 
