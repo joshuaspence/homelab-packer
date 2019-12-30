@@ -47,6 +47,7 @@ provisioners:
   # Configure Wi-Fi.
   - type: 'shell'
     inline:
+      - "[ -n '{{user `wifi_name`}}' -a -n '{{user `wifi_password`}}' ] || exit 0"
       - "wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' | grep --extended-regexp --invert-match '^\\s+#psk=' >> /etc/wpa_supplicant/wpa_supplicant.conf"
     inline_shebang: *shebang
 
@@ -108,7 +109,7 @@ provisioners:
 variables:
   target_image_size: '34359738368'
   timezone: 'Australia/Sydney'
-  wifi_name: null
-  wifi_password: null
+  wifi_name: ''
+  wifi_password: ''
 sensitive-variables:
   - 'wifi_password'
