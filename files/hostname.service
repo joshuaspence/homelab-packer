@@ -1,0 +1,14 @@
+[Unit]
+Description=Set hostname from boot partition
+ConditionPathExists=/boot/hostname
+Before=dhcpcd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/mv /boot/hostname /etc/hostname
+ExecStartPost=/bin/sh -c -e 'echo "127.0.1.1 $(cat /etc/hostname)" >> /etc/hosts'
+ExecStartPost=/sbin/reboot
+
+[Install]
+WantedBy=multi-user.target

@@ -15,13 +15,14 @@ builders:
     iso_checksum_url: 'file::build/raspian.zip.sha256'
 
 provisioners:
+  # Set hostname on boot.
+  - type: 'file'
+    source: 'files/hostname.service'
+    destination: '/lib/systemd/system/raspberrypi-hostname.service'
   - type: 'shell'
     inline:
-      - 'HOSTNAME=$(cat /etc/hostname)'
-      - 'echo {{user `hostname`}} > /etc/hostname'
-
-      # TODO: Make `sed` fail on no match, see https://stackoverflow.com/questions/15965073/return-code-of-sed-for-no-match.
-      - 'sed --expression "s/^\\(127\\.0\\.1\\.1\\s\\+\\)${HOSTNAME}$/\\1{{user `hostname`}}/g" --in-place /etc/hosts'
+      - 'ln --symbolic /lib/systemd/system/raspberrypi-hostname.service /etc/systemd/system/multi-user.target.wants/'
+      - 'sed --expression "/^127\\.0\\.1\\.1\\s\\+$(cat /etc/hostname)$/d" --in-place /etc/hosts'
     inline_shebang: &shebang '/bin/sh -eux'
 
   # Change timezone.
@@ -103,7 +104,6 @@ provisioners:
     environment_vars: *env
 
 variables:
-  hostname: 'raspberrypi'
   target_image_size: '34359738368'
   timezone: 'Australia/Sydney'
   wifi_name: null
