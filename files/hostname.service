@@ -7,7 +7,7 @@ Before=dhcpcd.service
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/bin/mv /boot/hostname /etc/hostname
-ExecStartPost=/bin/sh -c -e 'echo "127.0.1.1 $(cat /etc/hostname)" >> /etc/hosts'
+ExecStartPost=/bin/sh -c -e 'echo "127.0.1.1\t$(cat /etc/hostname)" >> /etc/hosts'
 ExecStartPost=/sbin/reboot
 
 [Install]
