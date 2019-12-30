@@ -21,6 +21,7 @@ provisioners:
     destination: '/lib/systemd/system/raspberrypi-hostname.service'
   - type: 'shell'
     inline:
+      - 'chmod 644 /lib/systemd/system/raspberrypi-hostname.service'
       - 'ln --symbolic /lib/systemd/system/raspberrypi-hostname.service /etc/systemd/system/multi-user.target.wants/'
       - 'sed --expression "/^127\\.0\\.1\\.1\\s\\+$(cat /etc/hostname)$/{d;h};\${x;/./{x;q0};x;q1}" --in-place /etc/hosts'
     inline_shebang: &shebang '/bin/sh -eux'
