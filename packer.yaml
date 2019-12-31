@@ -36,6 +36,7 @@ provisioners:
       - 'dpkg-reconfigure --frontend noninteractive tzdata'
     inline_shebang: *shebang
     environment_vars: &env
+      - 'APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1'
       - 'LC_ALL=C'
 
   # Enable SSH.
