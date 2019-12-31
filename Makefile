@@ -13,9 +13,8 @@ clean-all: clean
 # TODO: Move this to a `post-processor` in `packer.json`.
 .PHONY: deploy
 deploy:
-	# TODO: Optionally add `--verify`
 	$(call check_defined,DEVICE)
-	sudo flasher --device $(DEVICE) --image build/image
+	sudo dd if=build/raspberry_pi.img of=$(DEVICE) bs=4M conv=fsync status=progress
 
 qemu/arm-linux-user/qemu-arm-static:
 	sudo apt-get --quiet --yes build-dep qemu
