@@ -101,6 +101,10 @@ provisioners:
       - 'apt-get --quiet --yes --option Apt::AutoRemove::SuggestsImportant=false autoremove'
       - 'apt-get --quiet clean'
       - 'rm --force --recursive /var/lib/apt/lists/*'
+    inline_shebang: *shebang
+    environment_vars: *env
+  - type: 'shell'
+    inline:
       - 'find /var/log -type f -print0 | xargs --null truncate --size=0'
     inline_shebang: *shebang
     environment_vars: *env
