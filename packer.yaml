@@ -55,9 +55,7 @@ provisioners:
   - type: 'shell'
     inline:
       - 'rm /etc/apt/apt.conf.d/20listchanges'
-      - 'apt-get remove --quiet --yes --purge --auto-remove apt-listchanges'
     inline_shebang: *shebang
-    environment_vars: *env
 
   # Upgrade system packages.
   - type: 'shell'
