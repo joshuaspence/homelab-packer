@@ -7,6 +7,7 @@ builders:
     iso_target_extension: 'img'
     output_filename: 'build/raspberry_pi.img'
     image_type: 'raspberrypi'
+    target_image_size: '4294967296'
     qemu_binary: 'qemu/arm-linux-user/qemu-arm-static'
 
     # TODO: Point `iso_url` and `iso_checksum_url` to HTTPS URLs instead of local files.
