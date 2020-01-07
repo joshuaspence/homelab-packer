@@ -42,7 +42,8 @@ provisioners:
   # Enable SSH.
   - type: 'shell'
     inline:
-      - 'touch /boot/ssh'
+      - 'systemctl enable ssh.service'
+      - 'systemctl disable sshswitch.service'
     inline_shebang: *shebang
 
   # Configure Wi-Fi.
