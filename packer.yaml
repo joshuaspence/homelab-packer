@@ -51,6 +51,11 @@ provisioners:
       - "[ -n '{{user `wifi_name`}}' -a -n '{{user `wifi_password`}}' ] || exit 0"
       - "wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' | grep --extended-regexp --invert-match '^\\s+#psk=' >> /etc/wpa_supplicant/wpa_supplicant.conf"
     inline_shebang: *shebang
+  - type: 'shell'
+    inline:
+      - 'apt-get remove --quiet --yes --purge raspberrypi-net-mods'
+    inline_shebang: *shebang
+    environment_vars: *env
 
   # Disable Debian changelogs.
   - type: 'shell'
@@ -96,11 +101,6 @@ provisioners:
     environment_vars: *env
 
   # Cleanup.
-  - type: 'shell'
-    inline:
-      - 'apt-get remove --quiet --yes --purge raspberrypi-net-mods'
-    inline_shebang: *shebang
-    environment_vars: *env
   - type: 'shell'
     inline:
       - 'apt-get --quiet --yes --option Apt::AutoRemove::SuggestsImportant=false autoremove'
