@@ -98,6 +98,11 @@ provisioners:
   # Cleanup.
   - type: 'shell'
     inline:
+      - 'apt-get remove --quiet --yes --purge raspberrypi-net-mods'
+    inline_shebang: *shebang
+    environment_vars: *env
+  - type: 'shell'
+    inline:
       - 'apt-get --quiet --yes --option Apt::AutoRemove::SuggestsImportant=false autoremove'
       - 'apt-get --quiet clean'
       - 'rm --force --recursive /var/lib/apt/lists/*'
