@@ -3,6 +3,7 @@
 
 # Generated
 /build/
+/mnt/
 
 # Packer
 /packer_cache/
