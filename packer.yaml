@@ -50,6 +50,7 @@ provisioners:
   - type: 'shell'
     inline:
       - "[ -n '{{user `wifi_name`}}' -a -n '{{user `wifi_password`}}' ] || exit 0"
+      - "echo 'country={{user `wifi_country`}}' >> /etc/wpa_supplicant/wpa_supplicant.conf"
       - "wpa_passphrase '{{user `wifi_name`}}' '{{user `wifi_password`}}' | grep --extended-regexp --invert-match '^\\s+#psk=' >> /etc/wpa_supplicant/wpa_supplicant.conf"
     inline_shebang: *shebang
   - type: 'shell'
@@ -117,6 +118,7 @@ provisioners:
 
 variables:
   timezone: 'Australia/Sydney'
+  wifi_country: 'AU'
   wifi_name: ''
   wifi_password: ''
 sensitive-variables:
