@@ -118,6 +118,9 @@ provisioners:
   - type: 'shell'
     inline:
       - 'rm --force /etc/passwd- /etc/group- /etc/shadow- /etc/gshadow- /etc/subuid- /etc/subgid-'
+      - 'rm --force /etc/apt/sources.list~ /etc/apt/trusted.gpg~'
+      - 'rm --force /var/cache/debconf/*-old /var/lib/dpkg/*-old'
+      - 'true > /etc/machine-id'
     inline_shebang: *shebang
 
 variables:
