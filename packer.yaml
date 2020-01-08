@@ -44,6 +44,7 @@ provisioners:
       - 'systemctl enable ssh.service'
       - 'systemctl disable sshswitch.service'
     inline_shebang: *shebang
+    environment_vars: *env
 
   # Configure Wi-Fi.
   - type: 'shell'
