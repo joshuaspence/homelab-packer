@@ -115,6 +115,10 @@ provisioners:
       - 'find /var/log -type f -print0 | xargs --null truncate --size=0'
     inline_shebang: *shebang
     environment_vars: *env
+  - type: 'shell'
+    inline:
+      - 'rm --force /etc/passwd- /etc/group- /etc/shadow- /etc/gshadow- /etc/subuid- /etc/subgid-'
+    inline_shebang: *shebang
 
 variables:
   timezone: 'Australia/Sydney'
