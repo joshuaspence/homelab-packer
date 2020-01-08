@@ -1,5 +1,5 @@
 .PHONY: build
-build: build/raspian.zip qemu/arm-linux-user/qemu-arm-static
+build: build/raspian.zip
 	cat packer.yaml | yaml2json | sudo packer build -var-file config.json $(PACKER_OPTS) -
 
 .PHONY: clean
@@ -15,16 +15,6 @@ clean-all: clean
 deploy:
 	$(call check_defined,DEVICE)
 	sudo dd if=build/raspberry_pi.img of=$(DEVICE) bs=4M conv=fsync status=progress
-
-qemu/arm-linux-user/qemu-arm-static:
-	sudo apt-get --quiet --yes build-dep qemu
-	wget -qO- https://download.qemu.org/qemu-4.1.0.tar.xz | tar xJf -
-	mv qemu-4.1.0 qemu
-	cd qemu && ./configure --static --disable-system --enable-linux-user
-	cd qemu && make -j8
-	mv qemu/arm-linux-user/qemu-arm qemu/arm-linux-user/qemu-arm-static
-
-export PATH := $(CURDIR)/qemu/arm-linux-user:$(PATH)
 
 #===============================================================================
 # Manual Targets
