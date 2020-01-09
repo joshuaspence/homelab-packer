@@ -31,19 +31,10 @@ __check_defined = $(if $(value $1),,$(error Undefined $1$(if $2, ($2))$(if $(val
 CHROOT_SOURCE := build/raspberry_pi.img
 CHROOT_TARGET := mnt
 
-# NOTE: These steps were based on https://gist.github.com/htruong/7df502fb60268eeee5bca21ef3e436eb.
-# TODO: Mount `/etc/resolv.conf`
 .PHONY: chroot
 chroot:
 	$(MAKE) mount SOURCE=$(CHROOT_SOURCE) TARGET=$(CHROOT_TARGET)
-	$(MOUNT) --bind /dev $(CHROOT_TARGET)/dev
-	$(MOUNT) --types devpts devpts $(CHROOT_TARGET)/dev/pts
-	$(MOUNT) --types proc proc $(CHROOT_TARGET)/proc
-	$(MOUNT) --types binfmt_misc binfmt_misc $(CHROOT_TARGET)/proc/sys/fs/binfmt_misc
-	$(MOUNT) --types sysfs sysfs $(CHROOT_TARGET)/sys
-
-	sudo chroot $(CHROOT_TARGET)
-
+	sudo systemd-nspawn --directory $(CHROOT_TARGET)
 	$(MAKE) unmount SOURCE=$(CHROOT_SOURCE) TARGET=$(CHROOT_TARGET)
 
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
