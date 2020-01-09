@@ -32,7 +32,6 @@ CHROOT_SOURCE := build/raspberry_pi.img
 CHROOT_TARGET := mnt
 
 # NOTE: These steps were based on https://gist.github.com/htruong/7df502fb60268eeee5bca21ef3e436eb.
-# TODO: Do we need to copy `qemu-arm-static`?
 # TODO: Mount `/etc/resolv.conf`
 .PHONY: chroot
 chroot:
@@ -42,9 +41,6 @@ chroot:
 	$(MOUNT) --types proc proc $(CHROOT_TARGET)/proc
 	$(MOUNT) --types binfmt_misc binfmt_misc $(CHROOT_TARGET)/proc/sys/fs/binfmt_misc
 	$(MOUNT) --types sysfs sysfs $(CHROOT_TARGET)/sys
-
-	sudo cp $$(which qemu-arm-static) $(CHROOT_TARGET)/usr/bin/qemu-arm-static
-	sudo chown root:root $(CHROOT_TARGET)/usr/bin/qemu-arm-static
 
 	sudo chroot $(CHROOT_TARGET)
 
