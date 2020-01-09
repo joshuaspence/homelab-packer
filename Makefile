@@ -31,10 +31,11 @@ __check_defined = $(if $(value $1),,$(error Undefined $1$(if $2, ($2))$(if $(val
 CHROOT_SOURCE := build/raspberry_pi.img
 CHROOT_TARGET := mnt
 
+# TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`
 .PHONY: chroot
 chroot:
 	$(MAKE) mount SOURCE=$(CHROOT_SOURCE) TARGET=$(CHROOT_TARGET)
-	sudo systemd-nspawn --directory $(CHROOT_TARGET)
+	sudo systemd-nspawn --directory=$(CHROOT_TARGET) --quiet $(CHROOT_OPTS)
 	$(MAKE) unmount SOURCE=$(CHROOT_SOURCE) TARGET=$(CHROOT_TARGET)
 
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
