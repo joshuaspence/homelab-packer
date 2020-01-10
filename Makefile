@@ -1,6 +1,40 @@
+#===============================================================================
+# Macros
+#===============================================================================
+CHROOT_OPTS ?=
+DD           = sudo dd bs=4M conv=fsync status=progress
+KPARTX       = sudo kpartx
+MOUNT        = sudo mount
+PACKER       = sudo packer
+PACKER_OPTS ?=
+UMOUNT       = sudo umount --recursive
+
+#===============================================================================
+# Configuration
+#===============================================================================
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --warn-undefined-variables
+
+#===============================================================================
+# Target Definitions
+#===============================================================================
+CHROOT = mnt
+OUTPUT = build/raspberry_pi.img
+
+#===============================================================================
+# Targets
+#===============================================================================
 .PHONY: build
 build: build/raspian.zip
-	cat packer.yaml | yaml2json | sudo packer build -var-file config.json $(PACKER_OPTS) -
+	cat packer.yaml | yaml2json | $(PACKER) build -var-file config.json $(PACKER_OPTS) -
+
+# TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`
+.PHONY: chroot
+chroot:
+	@$(MAKE) mount
+	sudo systemd-nspawn --directory=$(CHROOT) --chdir=/ --quiet $(CHROOT_OPTS)
+	@$(MAKE) unmount
 
 .PHONY: clean
 clean:
@@ -10,51 +44,33 @@ clean:
 clean-all: clean
 	rm --force --recursive packer_cache
 
-# TODO: Move this to a `post-processor` in `packer.json`.
 .PHONY: deploy
 deploy:
-	$(call check_defined,DEVICE)
-	sudo dd if=build/raspberry_pi.img of=$(DEVICE) bs=4M conv=fsync status=progress
-
-#===============================================================================
-# Manual Targets
-#===============================================================================
-
-KPARTX    := sudo kpartx
-MAKEFLAGS += --no-print-directory
-MOUNT     := sudo mount
-UMOUNT    := sudo umount --recursive
-
-CHROOT_SOURCE := build/raspberry_pi.img
-CHROOT_TARGET := mnt
-
-# TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`
-.PHONY: chroot
-chroot:
-	$(MAKE) mount
-	sudo systemd-nspawn --directory=$(CHROOT_TARGET) --chdir=/ --quiet $(CHROOT_OPTS)
-	$(MAKE) unmount
+	! test -b $(DEVICE) && test -c $(DEVICE)
+	$(DD) if=$(OUTPUT) of=$(DEVICE)
 
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
 .PHONY: mount
 mount:
 	# Create a device map.
-	$(KPARTX) -a -s $(CHROOT_SOURCE)
-	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(CHROOT_SOURCE) | cut --delimiter=' ' --fields=1)))
+	$(KPARTX) -a -s $(OUTPUT)
+	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(OUTPUT) | cut --delimiter=' ' --fields=1)))
 
 	# Mount partitions.
-	mkdir $(CHROOT_TARGET)
-	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(CHROOT_TARGET)
-	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(CHROOT_TARGET)/boot
+	mkdir $(CHROOT)
+	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(CHROOT)
+	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(CHROOT)/boot
 
 .PHONY: unmount
 unmount:
-	$(UMOUNT) $(CHROOT_TARGET)
-	rmdir $(CHROOT_TARGET)
-	$(KPARTX) -d $(CHROOT_SOURCE)
+	$(UMOUNT) $(CHROOT)
+	rmdir $(CHROOT)
+	$(KPARTX) -d $(OUTPUT)
 
+#===============================================================================
+# Rules
+#===============================================================================
 .DELETE_ON_ERROR:
-.ONESHELL:
 build/raspian.zip:
 	RASPIAN_URL=$$(curl --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspbian_lite_latest)
 	curl --silent $$RASPIAN_URL.sha256 | awk '{print $$1}' > $@.sha256
