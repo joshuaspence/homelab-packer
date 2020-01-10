@@ -32,7 +32,7 @@ CHROOT_TARGET := mnt
 .PHONY: chroot
 chroot:
 	$(MAKE) mount
-	sudo systemd-nspawn --directory=$(CHROOT_TARGET) --quiet $(CHROOT_OPTS)
+	sudo systemd-nspawn --directory=$(CHROOT_TARGET) --chdir=/ --quiet $(CHROOT_OPTS)
 	$(MAKE) unmount
 
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
