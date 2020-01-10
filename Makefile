@@ -25,39 +25,33 @@ MAKEFLAGS += --no-print-directory
 MOUNT     := sudo mount
 UMOUNT    := sudo umount --recursive
 
-check_defined = $(strip $(foreach 1,$1,$(call __check_defined,$1,$(strip $(value 2)))))
-__check_defined = $(if $(value $1),,$(error Undefined $1$(if $2, ($2))$(if $(value @), required by target `$@')))
-
 CHROOT_SOURCE := build/raspberry_pi.img
 CHROOT_TARGET := mnt
 
 # TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`
 .PHONY: chroot
 chroot:
-	$(MAKE) mount SOURCE=$(CHROOT_SOURCE) TARGET=$(CHROOT_TARGET)
+	$(MAKE) mount
 	sudo systemd-nspawn --directory=$(CHROOT_TARGET) --quiet $(CHROOT_OPTS)
-	$(MAKE) unmount SOURCE=$(CHROOT_SOURCE) TARGET=$(CHROOT_TARGET)
+	$(MAKE) unmount
 
 # TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
 .PHONY: mount
 mount:
-	$(call check_defined,SOURCE TARGET)
-
 	# Create a device map.
-	$(KPARTX) -a -s $(SOURCE)
-	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(SOURCE) | cut --delimiter=' ' --fields=1)))
+	$(KPARTX) -a -s $(CHROOT_SOURCE)
+	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(CHROOT_SOURCE) | cut --delimiter=' ' --fields=1)))
 
 	# Mount partitions.
-	mkdir $(TARGET)
-	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(TARGET)
-	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(TARGET)/boot
+	mkdir $(CHROOT_TARGET)
+	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(CHROOT_TARGET)
+	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(CHROOT_TARGET)/boot
 
 .PHONY: unmount
 unmount:
-	$(call check_defined,SOURCE TARGET)
-	$(UMOUNT) $(TARGET)
-	rmdir $(TARGET)
-	$(KPARTX) -d $(SOURCE)
+	$(UMOUNT) $(CHROOT_TARGET)
+	rmdir $(CHROOT_TARGET)
+	$(KPARTX) -d $(CHROOT_SOURCE)
 
 .DELETE_ON_ERROR:
 .ONESHELL:
