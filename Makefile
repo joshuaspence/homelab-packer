@@ -6,6 +6,7 @@ KPARTX          = sudo kpartx
 MOUNT           = sudo mount
 PACKER          = sudo packer
 PACKER_OPTS    ?=
+RM				= rm --force
 SYSTEMD_NSPAWN  = sudo systemd-nspawn --quiet
 UMOUNT          = sudo umount --recursive
 
@@ -41,11 +42,11 @@ chroot:
 
 .PHONY: clean
 clean:
-	rm --force --recursive build
+	$(RM) --recursive build
 
 .PHONY: clean-all
 clean-all: clean
-	rm --force --recursive packer_cache
+	$(RM) --recursive packer_cache
 
 .PHONY: deploy
 deploy:
