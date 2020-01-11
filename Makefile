@@ -32,7 +32,7 @@ OUTPUT = build/raspberry_pi.img
 build: build/raspian.zip
 	cat packer.yaml | yaml2json | $(PACKER) build $(PACKER_OPTS) -
 
-# TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`
+# TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`.
 .PHONY: chroot
 chroot:
 	@$(MAKE) mount
@@ -73,6 +73,8 @@ unmount:
 #===============================================================================
 # Rules
 #===============================================================================
+
+# TODO: This shouldn't be needed, see https://github.com/hashicorp/packer/issues/8586.
 .DELETE_ON_ERROR:
 build/raspian.zip:
 	RASPIAN_URL=$$(curl --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspbian_lite_latest)
