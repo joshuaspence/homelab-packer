@@ -9,6 +9,9 @@ PACKER_OPTS    ?=
 SYSTEMD_NSPAWN  = sudo systemd-nspawn --quiet
 UMOUNT          = sudo umount --recursive
 
+# Load user variables from `config.json` if such a file exists.
+PACKER_OPTS += $(if $(wildcard config.json),-var-file config.json)
+
 #===============================================================================
 # Configuration
 #===============================================================================
@@ -27,7 +30,7 @@ OUTPUT = build/raspberry_pi.img
 #===============================================================================
 .PHONY: build
 build: build/raspian.zip
-	cat packer.yaml | yaml2json | $(PACKER) build -var-file config.json $(PACKER_OPTS) -
+	cat packer.yaml | yaml2json | $(PACKER) build $(PACKER_OPTS) -
 
 # TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`
 .PHONY: chroot
