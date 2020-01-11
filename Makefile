@@ -1,13 +1,13 @@
 #===============================================================================
 # Macros
 #===============================================================================
-CHROOT_OPTS ?=
-DD           = sudo dd bs=4M conv=fsync status=progress
-KPARTX       = sudo kpartx
-MOUNT        = sudo mount
-PACKER       = sudo packer
-PACKER_OPTS ?=
-UMOUNT       = sudo umount --recursive
+DD              = sudo dd bs=4M conv=fsync status=progress
+KPARTX          = sudo kpartx
+MOUNT           = sudo mount
+PACKER          = sudo packer
+PACKER_OPTS    ?=
+SYSTEMD_NSPAWN  = sudo systemd-nspawn --quiet
+UMOUNT          = sudo umount --recursive
 
 #===============================================================================
 # Configuration
@@ -33,7 +33,7 @@ build: build/raspian.zip
 .PHONY: chroot
 chroot:
 	@$(MAKE) mount
-	sudo systemd-nspawn --directory=$(CHROOT) --chdir=/ --quiet $(CHROOT_OPTS)
+	$(SYSTEMD_NSPAWN) --directory=$(CHROOT) --chdir=/
 	@$(MAKE) unmount
 
 .PHONY: clean
