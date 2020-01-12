@@ -24,7 +24,7 @@ MAKEFLAGS += --warn-undefined-variables
 # Target Definitions
 #===============================================================================
 CHROOT = mnt
-OUTPUT = build/raspberry_pi.img
+IMAGE  = build/raspberry_pi.img
 
 #===============================================================================
 # Targets
@@ -50,15 +50,14 @@ clean-all: clean
 
 .PHONY: deploy
 deploy:
-	! test -b $(DEVICE) && test -c $(DEVICE)
-	$(DD) if=$(OUTPUT) of=$(DEVICE)
+	test -c $(DEVICE)
+	$(DD) if=$(IMAGE) of=$(DEVICE)
 
-# TODO: Pass `-o uid=$USER,gid=$USER` to `mount`.
 .PHONY: mount
 mount:
 	# Create a device map.
-	$(KPARTX) -a -s $(OUTPUT)
-	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(OUTPUT) | cut --delimiter=' ' --fields=1)))
+	$(KPARTX) -a -s $(IMAGE)
+	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(IMAGE) | cut --delimiter=' ' --fields=1)))
 
 	# Mount partitions.
 	mkdir $(CHROOT)
@@ -69,7 +68,7 @@ mount:
 unmount:
 	$(UMOUNT) $(CHROOT)
 	rmdir $(CHROOT)
-	$(KPARTX) -d $(OUTPUT)
+	$(KPARTX) -d $(IMAGE)
 
 #===============================================================================
 # Rules
