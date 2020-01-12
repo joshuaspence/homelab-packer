@@ -77,6 +77,6 @@ unmount:
 # TODO: This shouldn't be needed, see https://github.com/hashicorp/packer/issues/8586.
 .DELETE_ON_ERROR:
 build/raspian.zip:
-	RASPIAN_URL=$$(curl --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspbian_lite_latest)
-	curl --silent $$RASPIAN_URL.sha256 | awk '{print $$1}' > $@.sha256
-	curl --output $@ --progress-bar $$RASPIAN_URL
+	$(eval RASPIAN_URL := $(shell curl --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspbian_lite_latest))
+	curl --output $@ --progress-bar $(RASPIAN_URL)
+	curl --silent $(RASPIAN_URL).sha256 | awk '{print $$1}' > $@.sha256
