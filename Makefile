@@ -33,7 +33,6 @@ IMAGE  = build/raspberry_pi.img
 build: build/raspian.zip
 	cat packer.yaml | yaml2json | $(PACKER) build $(PACKER_OPTS) -
 
-# TODO: Maybe add the following flags to `systemd-nspawn`: `--ephemeral`, `--private-users`, `--bind`, `--bind-ro`, `--tmpfs`, `--register`.
 .PHONY: chroot
 chroot:
 	@$(MAKE) mount
