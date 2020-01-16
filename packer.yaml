@@ -1,6 +1,4 @@
 ---
-min_packer_version: '1.4.5'
-
 builders:
   - type: 'arm-image'
     iso_checksum_type: 'sha256'
@@ -130,3 +128,5 @@ variables:
   wifi_password: ''
 sensitive-variables:
   - 'wifi_password'
+
+min_packer_version: '1.4.5'
