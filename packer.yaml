@@ -42,7 +42,6 @@ provisioners:
       - 'systemctl enable ssh.service'
       - 'systemctl disable sshswitch.service'
     inline_shebang: *shebang
-    environment_vars: *env
 
   # Configure Wi-Fi.
   - type: 'shell'
@@ -94,7 +93,7 @@ provisioners:
 
       # Install Kubernetes.
       - 'curl --fail --show-error --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -'
-      - 'echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list'
+      - "echo 'deb https://apt.kubernetes.io/ kubernetes-xenial main' > /etc/apt/sources.list.d/kubernetes.list"
       - 'apt-get --quiet update'
       - 'apt-get --no-install-recommends --quiet --yes install kubeadm kubectl kubelet'
     inline_shebang: *shebang
@@ -112,12 +111,13 @@ provisioners:
     inline:
       - 'find /var/log -type f -print0 | xargs --null truncate --size=0'
     inline_shebang: *shebang
-    environment_vars: *env
   - type: 'shell'
     inline:
       - 'rm --force /etc/passwd- /etc/group- /etc/shadow- /etc/gshadow- /etc/subuid- /etc/subgid-'
       - 'rm --force /etc/apt/sources.list~ /etc/apt/trusted.gpg~'
       - 'rm --force /var/cache/debconf/*-old /var/lib/dpkg/*-old'
+
+      # TODO: Do we need this?
       - 'true > /etc/machine-id'
     inline_shebang: *shebang
 
