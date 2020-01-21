@@ -1,3 +1,5 @@
+# TODO: Check this. See https://wiki.archlinux.org/index.php/Systemd-firstboot, https://superuser.com/questions/1267522/changing-hostname-on-boot-on-debian-stretch and https://unix.stackexchange.com/questions/353597/set-hostname-on-first-boot-before-network-service/353852.
+
 [Unit]
 Description=Set hostname from boot partition
 ConditionPathExists=/boot/hostname
