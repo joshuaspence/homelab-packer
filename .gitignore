@@ -4,6 +4,7 @@
 # Generated
 /build/
 /mnt/
+/.#mnt.lck
 
 # Packer
 /packer_cache/
