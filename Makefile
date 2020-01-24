@@ -1,6 +1,7 @@
 #===============================================================================
 # Macros
 #===============================================================================
+CHROOT_OPTS    ?=
 DD              = sudo dd bs=4M conv=fsync status=progress
 KPARTX          = sudo kpartx
 MOUNT           = sudo mount
@@ -36,7 +37,7 @@ build: build/raspian.zip
 .PHONY: chroot
 chroot:
 	@$(MAKE) mount
-	$(SYSTEMD_NSPAWN) --directory=$(CHROOT) --chdir=/
+	$(SYSTEMD_NSPAWN) --directory=$(CHROOT) --chdir=/ $(CHROOT_OPTS)
 	@$(MAKE) unmount
 
 .PHONY: clean
