@@ -1,10 +1,10 @@
 # Configuration
 /config.json
 
-# Generated
+# Packer
 /build/
+/packer_cache/
+
+# systemd-nspawn
 /mnt/
 /.#mnt.lck
-
-# Packer
-/packer_cache/
