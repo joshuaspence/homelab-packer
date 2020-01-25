@@ -1,15 +1,12 @@
 ---
 builders:
   - type: 'arm-image'
+    iso_checksum_url: 'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-09-30/2019-09-26-raspbian-buster-lite.zip.sha256'
     iso_checksum_type: 'sha256'
+    iso_url: 'https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-09-30/2019-09-26-raspbian-buster-lite.zip'
     iso_target_extension: 'img'
     output_filename: 'build/raspberry_pi.img'
-    image_type: 'raspberrypi'
     target_image_size: '4294967296'
-
-    # TODO: Point `iso_url` and `iso_checksum_url` to HTTPS URLs instead of local files.
-    iso_url: 'file::build/raspian.zip'
-    iso_checksum_url: 'file::build/raspian.zip.sha256'
 
 provisioners:
   # Set hostname on boot.
