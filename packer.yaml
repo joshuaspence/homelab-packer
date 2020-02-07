@@ -120,8 +120,8 @@ provisioners:
     inline_shebang: *shebang
 
 variables:
-  raspbian_release: '2019-09-26'
-  raspbian_release_date: '2019-09-30'
+  raspbian_release: '2020-02-05'
+  raspbian_release_date: '2020-02-07'
   timezone: 'Australia/Sydney'
   wifi_country: 'AU'
   wifi_name: ''
