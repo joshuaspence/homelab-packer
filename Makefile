@@ -32,7 +32,7 @@ IMAGE  = build/raspberry_pi.img
 #===============================================================================
 .PHONY: build
 build:
-	cat packer.yaml | yaml2json | $(PACKER) build $(PACKER_OPTS) -
+	$(PACKER) build $(PACKER_OPTS) main.pkr.hcl
 
 .PHONY: chroot
 chroot:
