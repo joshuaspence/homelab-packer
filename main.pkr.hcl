@@ -7,6 +7,15 @@ source "arm-image" "main" {
   target_image_size    = "4294967296"
 }
 
+locals {
+  env = [
+    "APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1",
+    "LC_ALL=C",
+  ]
+
+  shebang = "/bin/sh -eux"
+}
+
 build {
   sources = ["source.arm-image.main"]
 
@@ -23,7 +32,7 @@ build {
 
   provisioner "shell" {
     inline         = ["systemctl enable raspberrypi-hostname.service"]
-    inline_shebang = "/bin/sh -eux"
+    inline_shebang = local.shebang
   }
 
   # Change timezone.
@@ -35,8 +44,8 @@ build {
       "dpkg-reconfigure --frontend noninteractive tzdata",
     ]
 
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   # Enable SSH.
@@ -46,8 +55,8 @@ build {
       "systemctl disable sshswitch.service",
     ]
 
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   # Configure Wi-Fi.
@@ -58,19 +67,19 @@ build {
       "wpa_passphrase '${var.wifi_name}' '${var.wifi_password}' | grep --extended-regexp --invert-match '^\\s+#psk=' >> /etc/wpa_supplicant/wpa_supplicant.conf",
     ]
 
-    inline_shebang = "/bin/sh -eux"
+    inline_shebang = local.shebang
   }
 
   provisioner "shell" {
     inline           = ["apt-get remove --quiet --yes --purge raspberrypi-net-mods"]
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   # Disable Debian changelogs.
   provisioner "shell" {
     inline         = ["rm /etc/apt/apt.conf.d/20listchanges"]
-    inline_shebang = "/bin/sh -eux"
+    inline_shebang = local.shebang
   }
 
   # Upgrade system packages.
@@ -81,8 +90,8 @@ build {
       "apt-get --quiet --yes dist-upgrade",
     ]
 
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   # Install Docker.
@@ -92,8 +101,8 @@ build {
       "usermod --append --groups docker pi",
     ]
 
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   # Install Kubernetes.
@@ -115,8 +124,8 @@ build {
       "apt-get --no-install-recommends --quiet --yes install kubeadm kubectl kubelet",
     ]
 
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   # Cleanup.
@@ -127,13 +136,13 @@ build {
       "rm --force --recursive /var/lib/apt/lists/*",
     ]
 
-    inline_shebang   = "/bin/sh -eux"
-    environment_vars = ["APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1", "LC_ALL=C"]
+    inline_shebang   = local.shebang
+    environment_vars = local.env
   }
 
   provisioner "shell" {
     inline           = ["find /var/log -type f -print0 | xargs --null truncate --size=0"]
-    inline_shebang   = "/bin/sh -eux"
+    inline_shebang   = local.shebang
   }
 
   provisioner "shell" {
@@ -146,7 +155,7 @@ build {
       "true > /etc/machine-id",
     ]
 
-    inline_shebang = "/bin/sh -eux"
+    inline_shebang = local.shebang
   }
 }
 
