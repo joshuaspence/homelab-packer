@@ -1,9 +1,15 @@
+locals {
+  raspbian_url = "https://downloads.raspberrypi.org/raspios_lite_${var.raspbian_release.architecture}/images/raspios_lite_${var.raspbian_release.architecture}-${var.raspbian_release.date}/${var.raspbian_release.version}-raspios-${var.raspbian_release.debian_release}-lite-${var.raspbian_release.architecture}.zip"
+}
+
 source "arm-image" "main" {
-  iso_checksum_url     = "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-${var.raspbian_release_date}/${var.raspbian_release}-raspbian-buster-lite.zip.sha256"
+  iso_checksum_url     = "${local.raspbian_url}.sha256"
   iso_checksum_type    = "sha256"
-  iso_url              = "https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-${var.raspbian_release_date}/${var.raspbian_release}-raspbian-buster-lite.zip"
+  iso_url              = local.raspbian_url
   iso_target_extension = "img"
   output_filename      = "build/raspberry_pi.img"
+  image_type           = "raspberrypi"
+  resolv-conf          = "bind-host"
   target_image_size    = "4294967296"
 }
 
@@ -159,14 +165,21 @@ build {
   }
 }
 
+# See https://downloads.raspberrypi.org/raspios_lite_armhf_latest
 variable "raspbian_release" {
-  type    = string
-  default = "2020-02-05"
-}
+  type = object({
+    version        = string
+    date           = string
+    debian_release = string
+    architecture   = string
+  })
 
-variable "raspbian_release_date" {
-  type    = string
-  default = "2020-02-07"
+  default = {
+    version        = "2020-05-27"
+    date           = "2020-05-28"
+    debian_release = "buster"
+    architecture   = "armhf"
+  }
 }
 
 variable "timezone" {
