@@ -1,6 +1,3 @@
-# Configuration
-/config.json
-
 # Packer
 /build/
 /packer_cache/

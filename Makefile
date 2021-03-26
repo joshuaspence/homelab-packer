@@ -1,18 +1,18 @@
 #===============================================================================
 # Macros
 #===============================================================================
-CHROOT_OPTS    ?=
-DD              = sudo dd bs=4M conv=fsync status=progress
-KPARTX          = sudo kpartx
-MOUNT           = sudo mount
-PACKER          = sudo packer
+DD              = $(SUDO) dd bs=4M conv=fsync status=progress
+KPARTX          = $(SUDO) kpartx
+MKDIR           = mkdir
+MOUNT           = $(SUDO) mount
+PACKER          = packer
 PACKER_OPTS    ?=
 RM				= rm --force
-SYSTEMD_NSPAWN  = sudo systemd-nspawn --quiet
-UMOUNT          = sudo umount --recursive
-
-# Load user variables from `config.json` if such a file exists.
-PACKER_OPTS += $(if $(wildcard config.json),-var-file config.json)
+RMDIR           = rmdir
+SUDO            = sudo
+SYNC            = $(SUDO) sync
+SYSTEMD_NSPAWN  = $(SUDO) systemd-nspawn --quiet
+UMOUNT          = $(SUDO) umount --recursive
 
 #===============================================================================
 # Configuration
@@ -32,12 +32,12 @@ IMAGE  = build/raspberry_pi.img
 #===============================================================================
 .PHONY: build
 build:
-	$(PACKER) build $(PACKER_OPTS) main.pkr.hcl
+	@$(MAKE) --always-make $(IMAGE)
 
 .PHONY: chroot
 chroot:
 	@$(MAKE) mount
-	$(SYSTEMD_NSPAWN) --directory=$(CHROOT) --chdir=/ $(CHROOT_OPTS)
+	$(SYSTEMD_NSPAWN) --directory=$(CHROOT) --chdir=/
 	@$(MAKE) unmount
 
 .PHONY: clean
@@ -50,22 +50,39 @@ clean-all: clean
 
 .PHONY: deploy
 deploy:
-	test -c $(DEVICE)
 	$(DD) if=$(IMAGE) of=$(DEVICE)
+	$(SYNC) $(DEVICE)
+
+.PHONY: fmt
+fmt:
+	$(PACKER) fmt .
 
 .PHONY: mount
-mount:
-	# Create a device map.
-	$(KPARTX) -a -s $(IMAGE)
-	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $(IMAGE) | cut --delimiter=' ' --fields=1)))
-
-	# Mount partitions.
-	mkdir $(CHROOT)
-	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $(CHROOT)
-	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $(CHROOT)/boot
+mount: $(CHROOT)
 
 .PHONY: unmount
 unmount:
 	$(UMOUNT) $(CHROOT)
-	rmdir $(CHROOT)
+	$(RMDIR) $(CHROOT)
 	$(KPARTX) -d $(IMAGE)
+
+.PHONY: validate
+validate:
+	$(PACKER) validate .
+
+#===============================================================================
+# Rules
+#===============================================================================
+
+$(CHROOT): | $(IMAGE)
+	@# Create a device map.
+	$(KPARTX) -a -s $|
+	$(eval LOOP_DEVICE := $(addprefix /dev/mapper/,$(shell $(KPARTX) -l $| | cut --delimiter=' ' --fields=1)))
+
+	@# Mount partitions.
+	$(MKDIR) $@
+	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $@
+	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $@/boot
+
+$(IMAGE):
+	$(SUDO) $(PACKER) build .

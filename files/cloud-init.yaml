@@ -1,0 +1,31 @@
+---
+cloud_init_modules:
+  - 'migrator'
+  - 'seed_random'
+  - 'set_hostname'
+  - 'update_hostname'
+  - 'update_etc_hosts'
+  - 'rsyslog'
+  - 'users-groups'
+  - 'ssh'
+cloud_config_modules:
+  - 'set-passwords'
+  - 'timezone'
+cloud_final_modules:
+  - 'package-update-upgrade-install'
+  - 'scripts-vendor'
+  - 'scripts-per-once'
+  - 'scripts-per-boot'
+  - 'scripts-per-instance'
+  - 'scripts-user'
+  - 'final-message'
+  - 'power-state-change'
+manage_etc_hosts: true
+packages:
+  - 'vim'
+users:
+  - 'default'
+system_info:
+  distro: 'debian'
+  default_user:
+    name: 'pi'
