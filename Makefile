@@ -1,6 +1,7 @@
 #===============================================================================
 # Macros
 #===============================================================================
+CLOUD_LOCALDS   = cloud-localds
 DD              = $(SUDO) dd bs=4M conv=fsync status=progress
 KPARTX          = $(SUDO) kpartx
 MKDIR           = mkdir
@@ -9,10 +10,12 @@ PACKER          = packer
 PACKER_OPTS    ?=
 RM				= rm --force
 RMDIR           = rmdir
+SFDISK          = $(SUDO) sfdisk --quiet
 SUDO            = sudo
 SYNC            = $(SUDO) sync
 SYSTEMD_NSPAWN  = $(SUDO) systemd-nspawn --quiet
 UMOUNT          = $(SUDO) umount --recursive
+YQ              = yq --prettyPrint
 
 #===============================================================================
 # Configuration
@@ -51,6 +54,8 @@ clean-all: clean
 .PHONY: deploy
 deploy:
 	$(DD) if=$(IMAGE) of=$(DEVICE)
+	echo 'start=2048, size=1024, type=83' | $(SFDISK) --append $(DEVICE)
+	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(CLOUD_LOCALDS) - - files/meta-data.yaml | $(DD) of=$(DEVICE)3
 	$(SYNC) $(DEVICE)
 
 .PHONY: fmt

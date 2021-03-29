@@ -69,7 +69,7 @@ build {
   provisioner "shell" {
     inline = [
       "apt-get --quiet --yes install cloud-init",
-      "sed --expression 's|$| ds=nocloud;seedfrom=/boot/|' --in-place /boot/cmdline.txt",
+      "sed --expression 's|$| ds=nocloud|' --in-place /boot/cmdline.txt",
     ]
 
     environment_vars = local.env
@@ -79,16 +79,6 @@ build {
   provisioner "file" {
     source      = "files/cloud-init.yaml"
     destination = "/etc/cloud/cloud.cfg"
-  }
-
-  provisioner "file" {
-    source      = "files/meta-data.yaml"
-    destination = "/boot/meta-data"
-  }
-
-  provisioner "file" {
-    source      = "files/user-data.yaml"
-    destination = "/boot/user-data"
   }
 }
 
