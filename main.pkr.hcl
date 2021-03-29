@@ -67,11 +67,7 @@ build {
 
   # Install and configure `cloud-init`.
   provisioner "shell" {
-    inline = [
-      "apt-get --quiet --yes install cloud-init",
-      "sed --expression 's|$| ds=nocloud|' --in-place /boot/cmdline.txt",
-    ]
-
+    inline           = ["apt-get --quiet --yes install cloud-init"]
     environment_vars = local.env
     inline_shebang   = local.shebang
   }
