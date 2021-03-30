@@ -1,3 +1,7 @@
+packer {
+  required_version = ">= 1.7.0"
+}
+
 variable "operating_system" {
   type = object({
     architecture   = string
@@ -28,8 +32,7 @@ locals {
 }
 
 source "arm-image" "raspios" {
-  iso_checksum_url     = "${local.raspios_url}.sha256"
-  iso_checksum_type    = "sha256"
+  iso_checksum         = "file:${local.raspios_url}.sha256"
   iso_url              = local.raspios_url
   iso_target_extension = "img"
 }
