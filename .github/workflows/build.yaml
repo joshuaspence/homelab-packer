@@ -1,0 +1,37 @@
+---
+name: 'Build'
+on:
+  - 'pull_request'
+  - 'push'
+jobs:
+  # TODO: Use `packer init` when the plugin supports it, see
+  # https://github.com/solo-io/packer-builder-arm-image/pull/95.
+  _build:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v2'
+        with:
+          repository: 'solo-io/packer-builder-arm-image'
+      - uses: 'actions/setup-go@v2'
+        with:
+          go-version: '1.16'
+      - run: 'CGO_ENABLED=0 go build'
+      - uses: 'actions/upload-artifact@v2'
+        with:
+          name: 'packer-builder-arm-image'
+          path: 'packer-builder-arm-image'
+          if-no-files-found: 'error'
+
+  validate:
+    needs: '_build'
+    runs-on: 'ubuntu-latest'
+    container: 'hashicorp/packer:latest'
+    steps:
+      - uses: 'actions/checkout@v2'
+      - uses: 'actions/download-artifact@v2'
+        with:
+          name: 'packer-builder-arm-image'
+          path: '/bin/'
+      - run: 'chmod +x /bin/packer-builder-arm-image'
+      - run: 'apk add qemu-arm'
+      - run: 'packer validate -var qemu_binary=qemu-arm .'

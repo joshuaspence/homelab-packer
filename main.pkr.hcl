@@ -31,10 +31,16 @@ locals {
   )
 }
 
+variable "qemu_binary" {
+  type    = string
+  default = null
+}
+
 source "arm-image" "raspios" {
   iso_checksum         = "file:${local.raspios_url}.sha256"
   iso_url              = local.raspios_url
   iso_target_extension = "img"
+  qemu_binary          = var.qemu_binary
 }
 
 locals {
