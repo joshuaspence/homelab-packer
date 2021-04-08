@@ -1,10 +1,18 @@
 ---
 name: 'Lint'
-on: 'push'
+on:
+  - 'pull_request'
+  - 'push'
 jobs:
-  fmt:
+  packer-fmt:
     runs-on: 'ubuntu-latest'
     container: 'hashicorp/packer:latest'
     steps:
       - uses: 'actions/checkout@v2'
       - run: 'packer fmt -check .'
+
+  yamllint:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v2'
+      - uses: 'ibiqlik/action-yamllint@v3'
