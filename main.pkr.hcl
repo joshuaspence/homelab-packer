@@ -10,11 +10,12 @@ variable "operating_system" {
     debian_release = string
   })
 
-  # See https://downloads.raspberrypi.org/raspios_lite_armhf_latest
+  # TODO: Automatically look up the latest version from
+  # https://downloads.raspberrypi.org/raspios_lite_armhf_latest.
   default = {
     architecture   = "armhf"
-    date           = "2021-01-12"
-    version        = "2021-01-11"
+    date           = "2021-03-25"
+    version        = "2021-03-04"
     debian_release = "buster"
   }
 }
