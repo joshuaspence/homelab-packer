@@ -87,4 +87,3 @@ build {
     destination = "/etc/cloud/cloud.cfg"
   }
 }
-
