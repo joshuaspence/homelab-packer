@@ -6,24 +6,25 @@ on:
 jobs:
   # TODO: Use `packer init` when the plugin supports it, see
   # https://github.com/solo-io/packer-builder-arm-image/pull/95.
-  _build:
+  _builder:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/cache@v2'
-        id: 'cache'
-        with:
-          path: 'packer-builder-arm-image'
-          key: 'packer-builder-arm-image'
       - uses: 'actions/checkout@v2'
-        if: "steps.cache.outputs.cache-hit != 'true'"
         with:
           repository: 'solo-io/packer-builder-arm-image'
-      - uses: 'actions/setup-go@v2'
-        if: "steps.cache.outputs.cache-hit != 'true'"
+      - id: 'repository'
+        run: 'echo "::set-output name=sha::$(git rev-parse HEAD)"'
+      - id: 'cache'
+        uses: 'actions/cache@v2'
+        with:
+          path: 'packer-builder-arm-image'
+          key: 'builder-${{ steps.repository.outputs.sha }}'
+      - if: 'steps.cache.outputs.cache-hit != ''true'''
+        uses: 'actions/setup-go@v2'
         with:
           go-version: '1.16'
-      - run: 'CGO_ENABLED=0 go build'
-        if: "steps.cache.outputs.cache-hit != 'true'"
+      - if: 'steps.cache.outputs.cache-hit != ''true'''
+        run: 'go build'
       - uses: 'actions/upload-artifact@v2'
         with:
           name: 'packer-builder-arm-image'
@@ -38,7 +39,7 @@ jobs:
       - run: 'packer fmt -check .'
 
   packer-validate:
-    needs: '_build'
+    needs: '_builder'
     runs-on: 'ubuntu-latest'
     container: 'hashicorp/packer:latest'
     steps:
@@ -46,7 +47,8 @@ jobs:
       - uses: 'actions/download-artifact@v2'
         with:
           name: 'packer-builder-arm-image'
-          path: '~/.packer.d/plugins/'
+          path: '~/.packer.d/plugins'
+      - run: 'chmod +x ~/.packer.d/plugins/packer-builder-arm-image'
       - run: 'apk add qemu-arm'
       - run: 'packer validate -var qemu_binary=qemu-arm .'
 
