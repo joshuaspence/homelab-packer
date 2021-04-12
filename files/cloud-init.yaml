@@ -23,6 +23,8 @@ cloud_final_modules:
 manage_etc_hosts: true
 packages:
   - 'vim'
+package_reboot_if_required: true
+package_upgrade: true
 users:
   - 'default'
 system_info:
