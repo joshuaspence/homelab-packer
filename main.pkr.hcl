@@ -55,6 +55,9 @@ locals {
 build {
   source "source.arm-image.raspios" {
     output_filename = "build/raspberry_pi.img"
+
+    # This ensures that we don't run out of disk space in the provisioner steps.
+    target_image_size = 4 * 1024 * 1024 * 1024
   }
 
   # Enable SSH.
@@ -73,6 +76,12 @@ build {
     inline           = ["apt-get --quiet update"]
     environment_vars = local.env
     inline_shebang   = local.shebang
+  }
+
+  # Install Docker.
+  provisioner "shell" {
+    script           = "scripts/install_docker.sh"
+    environment_vars = local.env
   }
 
   # Install and configure `cloud-init`.
