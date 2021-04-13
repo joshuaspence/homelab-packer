@@ -86,4 +86,11 @@ build {
     source      = "files/cloud-init.yaml"
     destination = "/etc/cloud/cloud.cfg"
   }
+
+  # Upgrade system packages.
+  provisioner "shell" {
+    inline           = ["apt-get --quiet --yes upgrade"]
+    environment_vars = local.env
+    inline_shebang   = local.shebang
+  }
 }
