@@ -9,6 +9,7 @@ cloud_init_modules:
   - 'users-groups'
   - 'ssh'
 cloud_config_modules:
+  - 'locale'
   - 'set-passwords'
   - 'timezone'
 cloud_final_modules:

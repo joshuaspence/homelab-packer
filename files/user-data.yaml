@@ -1,5 +1,6 @@
 #cloud-config
 ---
+locale: 'en_AU'
 ssh_authorized_keys:
   - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOR0gnX8bnu31Liwmb9ppl7frnBujBDOwRIjf0Qhin7w josh@joshuaspence.com'
 timezone: 'Australia/Sydney'
