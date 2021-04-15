@@ -17,4 +17,5 @@ apt-get --quiet --yes install docker-ce docker-ce-cli
 # TODO: Move this to `cloud-init`.
 usermod --append --groups docker pi
 
+# TODO: Make this command idempotent.
 sed --expression 's/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1/' --in-place /boot/cmdline.txt
