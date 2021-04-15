@@ -90,4 +90,4 @@ $(CHROOT): | $(IMAGE)
 	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $@/boot
 
 $(IMAGE):
-	$(SUDO) $(PACKER) build .
+	$(SUDO) PACKER_PLUGIN_PATH=$${HOME}/.packer.d/plugins $(PACKER) build .
