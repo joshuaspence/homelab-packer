@@ -89,5 +89,7 @@ $(CHROOT): | $(IMAGE)
 	$(MOUNT) $(word 2,$(LOOP_DEVICE)) $@
 	$(MOUNT) $(word 1,$(LOOP_DEVICE)) $@/boot
 
+.ONESHELL: $(IMAGE)
 $(IMAGE):
-	$(SUDO) PACKER_PLUGIN_PATH=$${HOME}/.packer.d/plugins $(PACKER) build .
+	RASPIOS_URL=$$(curl --fail --head --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspios_lite_armhf_latest)
+	$(SUDO) PACKER_PLUGIN_PATH=$${HOME}/.packer.d/plugins $(PACKER) build -var raspios_url=$${RASPIOS_URL} .

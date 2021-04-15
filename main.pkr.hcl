@@ -2,34 +2,11 @@ packer {
   required_version = ">= 1.7.0"
 }
 
-variable "operating_system" {
-  type = object({
-    architecture   = string
-    date           = string
-    version        = string
-    debian_release = string
-  })
-
-  # TODO: Automatically look up the latest version from
-  # https://downloads.raspberrypi.org/raspios_lite_armhf_latest.
-  default = {
-    architecture   = "armhf"
-    date           = "2021-03-25"
-    version        = "2021-03-04"
-    debian_release = "buster"
-  }
-}
-
-locals {
-  raspios_url = format(
-    "https://downloads.raspberrypi.org/raspios_lite_%s/images/raspios_lite_%s-%s/%s-raspios-%s-%s-lite.zip",
-    var.operating_system.architecture,
-    var.operating_system.architecture,
-    var.operating_system.date,
-    var.operating_system.version,
-    var.operating_system.debian_release,
-    var.operating_system.architecture,
-  )
+# TODO: Automatically look up the latest version from
+# https://downloads.raspberrypi.org/raspios_lite_armhf_latest.
+variable "raspios_url" {
+  type    = string
+  default = "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-03-25/2021-03-04-raspios-buster-armhf-lite.zip"
 }
 
 variable "qemu_binary" {
@@ -38,8 +15,8 @@ variable "qemu_binary" {
 }
 
 source "arm-image" "raspios" {
-  iso_checksum         = "file:${local.raspios_url}.sha256"
-  iso_url              = local.raspios_url
+  iso_checksum         = "file:${var.raspios_url}.sha256"
+  iso_url              = var.raspios_url
   iso_target_extension = "img"
   qemu_binary          = var.qemu_binary
 }
