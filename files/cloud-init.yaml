@@ -10,6 +10,7 @@ cloud_init_modules:
   - 'ssh'
 cloud_config_modules:
   - 'set-passwords'
+  - 'ntp'
   - 'timezone'
 cloud_final_modules:
   - 'package-update-upgrade-install'
