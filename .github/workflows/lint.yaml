@@ -1,8 +1,10 @@
 ---
 name: 'Lint'
 on:
-  - 'pull_request'
-  - 'push'
+  pull_request: {}
+  push: {}
+  schedule:
+    - cron: '0 0 * * 1'
 jobs:
   # TODO: Use `packer init` when the plugin supports it, see
   # https://github.com/solo-io/packer-builder-arm-image/pull/95.
