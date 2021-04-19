@@ -22,8 +22,6 @@ cloud_final_modules:
   - 'final-message'
   - 'power-state-change'
 manage_etc_hosts: true
-packages:
-  - 'vim'
 package_reboot_if_required: true
 package_upgrade: true
 users:
