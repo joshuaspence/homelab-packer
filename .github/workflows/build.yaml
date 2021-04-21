@@ -40,6 +40,10 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v2'
+      - uses: 'actions/cache@v2'
+        with:
+          path: 'packer_cache'
+          key: 'packer_cache'
 
       - uses: 'hashicorp-contrib/setup-packer@v1'
       - uses: 'actions/download-artifact@v2'
@@ -48,11 +52,6 @@ jobs:
           path: '~/.packer.d/plugins'
       - run: 'chmod +x ~/.packer.d/plugins/packer-builder-arm-image'
       - run: 'sudo apt-get install kpartx qemu-user-static'
-
-      - uses: 'actions/cache@v2'
-        with:
-          path: 'packer_cache'
-          key: 'packer_cache'
 
       - run: 'make build'
       - uses: 'actions/upload-artifact@v2'
