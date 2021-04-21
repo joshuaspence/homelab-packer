@@ -1,0 +1,61 @@
+---
+name: 'Build'
+on:
+  pull_request: {}
+  push: {}
+  schedule:
+    - cron: '0 0 * * 1'
+jobs:
+  # TODO: Use `packer init` when the plugin supports it, see
+  # https://github.com/solo-io/packer-builder-arm-image/pull/95.
+  _builder:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v2'
+        with:
+          repository: 'solo-io/packer-builder-arm-image'
+      - id: 'repository'
+        run: 'echo "::set-output name=sha::$(git rev-parse HEAD)"'
+      - id: 'cache'
+        uses: 'actions/cache@v2'
+        with:
+          path: 'packer-builder-arm-image'
+          key: 'packer-builder-arm-image-${{ steps.repository.outputs.sha }}'
+      - if: 'steps.cache.outputs.cache-hit != ''true'''
+        uses: 'actions/setup-go@v2'
+        with:
+          go-version: '1.16'
+      - if: 'steps.cache.outputs.cache-hit != ''true'''
+        run: 'go build'
+        env:
+          CGO_ENABLED: 0
+      - uses: 'actions/upload-artifact@v2'
+        with:
+          name: 'packer-builder-arm-image'
+          path: 'packer-builder-arm-image'
+          if-no-files-found: 'error'
+
+  build:
+    needs: '_builder'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v2'
+
+      - uses: 'hashicorp-contrib/setup-packer@v1'
+      - uses: 'actions/download-artifact@v2'
+        with:
+          name: 'packer-builder-arm-image'
+          path: '~/.packer.d/plugins'
+      - run: 'chmod +x ~/.packer.d/plugins/packer-builder-arm-image'
+      - run: 'sudo apt-get install kpartx qemu-user-static'
+
+      - uses: 'actions/cache@v2'
+        with:
+          path: 'packer_cache'
+          key: 'packer_cache'
+
+      - run: 'make build'
+      - uses: 'actions/upload-artifact@v2'
+        with:
+          path: 'build/'
+          if-no-files-found: 'error'
