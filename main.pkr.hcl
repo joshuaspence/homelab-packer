@@ -9,16 +9,10 @@ variable "raspios_url" {
   default = "https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-03-25/2021-03-04-raspios-buster-armhf-lite.zip"
 }
 
-variable "qemu_binary" {
-  type    = string
-  default = null
-}
-
 source "arm-image" "raspios" {
   iso_checksum         = "file:${var.raspios_url}.sha256"
   iso_url              = var.raspios_url
   iso_target_extension = "img"
-  qemu_binary          = var.qemu_binary
 }
 
 locals {

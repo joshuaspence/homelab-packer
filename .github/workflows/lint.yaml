@@ -37,24 +37,26 @@ jobs:
 
   packer-fmt:
     runs-on: 'ubuntu-latest'
-    container: 'hashicorp/packer:latest'
     steps:
       - uses: 'actions/checkout@v2'
+      - uses: 'hashicorp-contrib/setup-packer@v1.0.0'
       - run: 'packer fmt -check .'
 
   packer-validate:
     needs: '_builder'
     runs-on: 'ubuntu-latest'
-    container: 'hashicorp/packer:latest'
     steps:
       - uses: 'actions/checkout@v2'
+
+      - uses: 'hashicorp-contrib/setup-packer@v1.0.0'
       - uses: 'actions/download-artifact@v2'
         with:
           name: 'packer-builder-arm-image'
           path: '~/.packer.d/plugins'
       - run: 'chmod +x ~/.packer.d/plugins/packer-builder-arm-image'
-      - run: 'apk add qemu-arm'
-      - run: 'packer validate -var qemu_binary=qemu-arm .'
+      - run: 'sudo apt-get install qemu-user-static'
+
+      - run: 'packer validate .'
 
   shellcheck:
     runs-on: 'ubuntu-latest'
