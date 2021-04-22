@@ -1,21 +1,20 @@
 #===============================================================================
 # Macros
 #===============================================================================
-CLOUD_LOCALDS   = cloud-localds
-DD              = $(SUDO) dd bs=4M conv=fsync status=progress
-KPARTX          = $(SUDO) kpartx
-MKDIR           = mkdir
-MOUNT           = $(SUDO) mount
-PACKER          = packer
-PACKER_OPTS    ?=
-RM				= rm --force
-RMDIR           = rmdir
-SFDISK          = $(SUDO) sfdisk --quiet
-SUDO            = sudo
-SYNC            = $(SUDO) sync
-SYSTEMD_NSPAWN  = $(SUDO) systemd-nspawn --quiet
-UMOUNT          = $(SUDO) umount --recursive
-YQ              = yq --prettyPrint
+CLOUD_LOCALDS = cloud-localds
+DD            = $(SUDO) dd bs=4M conv=fsync status=progress
+KPARTX        = $(SUDO) kpartx
+MKDIR         = mkdir
+MOUNT         = $(SUDO) mount
+NSPAWN        = $(SUDO) systemd-nspawn --quiet
+PACKER        = packer
+RM            = rm --force
+RMDIR         = rmdir
+SFDISK        = $(SUDO) sfdisk --quiet
+SUDO          = sudo
+SYNC          = $(SUDO) sync
+UMOUNT        = $(SUDO) umount --recursive
+YQ            = yq --prettyPrint
 
 #===============================================================================
 # Configuration
@@ -40,7 +39,7 @@ build:
 .PHONY: chroot
 chroot:
 	@$(MAKE) mount
-	$(SYSTEMD_NSPAWN) --directory=$(CHROOT) --chdir=/
+	$(NSPAWN) --directory=$(CHROOT) --chdir=/
 	@$(MAKE) unmount
 
 .PHONY: clean
@@ -58,10 +57,6 @@ deploy:
 	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(CLOUD_LOCALDS) - - files/meta-data.yaml | $(DD) of=$(DEVICE)3
 	$(SYNC) $(DEVICE)
 
-.PHONY: fmt
-fmt:
-	$(PACKER) fmt .
-
 .PHONY: mount
 mount: $(CHROOT)
 
@@ -70,10 +65,6 @@ unmount:
 	$(UMOUNT) $(CHROOT)
 	$(RMDIR) $(CHROOT)
 	$(KPARTX) -d $(IMAGE)
-
-.PHONY: validate
-validate:
-	$(PACKER) validate .
 
 #===============================================================================
 # Rules
