@@ -70,4 +70,14 @@ build {
     environment_vars = local.env
     inline_shebang   = local.shebang
   }
+
+  # Cleanup.
+  provisioner "shell" {
+    inline = [
+      "apt-get --quiet clean",
+      "rm --recursive --force /var/lib/apt/*",
+    ]
+    environment_vars = local.env
+    inline_shebang   = local.shebang
+  }
 }
