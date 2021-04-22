@@ -40,6 +40,8 @@ jobs:
   build:
     needs: '_builder'
     runs-on: 'ubuntu-latest'
+    env:
+      PACKER_PLUGIN_PATH: '~/.packer.d/plugins'
     steps:
       - uses: 'actions/checkout@v2'
       - uses: 'actions/cache@v2'
@@ -51,13 +53,13 @@ jobs:
       - uses: 'actions/download-artifact@v2'
         with:
           name: 'packer-builder-arm-image'
-          path: '~/.packer.d/plugins'
-      - run: 'chmod +x ~/.packer.d/plugins/packer-builder-arm-image'
+          path: '${{ env.PACKER_PLUGIN_PATH }}'
+      - run: 'chmod +x ${{ env.PACKER_PLUGIN_PATH }}/packer-builder-arm-image'
       - run: 'sudo apt-get install kpartx qemu-user-static'
 
       - run: 'make build'
       - uses: 'actions/upload-artifact@v2'
         with:
           name: 'image'
-          path: 'build/'
+          path: 'build'
           if-no-files-found: 'error'

@@ -11,7 +11,7 @@ PACKER        = packer
 RM            = rm --force
 RMDIR         = rmdir
 SFDISK        = $(SUDO) sfdisk --quiet
-SUDO          = sudo
+SUDO          = sudo --preserve-env
 SYNC          = $(SUDO) sync
 UMOUNT        = $(SUDO) umount --recursive
 YQ            = yq --prettyPrint
@@ -83,4 +83,4 @@ $(CHROOT): | $(IMAGE)
 .ONESHELL: $(IMAGE)
 $(IMAGE):
 	RASPIOS_URL=$$(curl --fail --head --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspios_lite_armhf_latest)
-	$(SUDO) PACKER_PLUGIN_PATH=$${HOME}/.packer.d/plugins $(PACKER) build -var raspios_url=$${RASPIOS_URL} .
+	$(SUDO) $(PACKER) build -var raspios_url=$${RASPIOS_URL} .
