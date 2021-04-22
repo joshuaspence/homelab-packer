@@ -21,6 +21,7 @@ jobs:
         with:
           path: 'packer-builder-arm-image'
           key: 'packer-builder-arm-image-${{ steps.repository.outputs.sha }}'
+
       - if: 'steps.cache.outputs.cache-hit != ''true'''
         uses: 'actions/setup-go@v2'
         with:
@@ -29,6 +30,7 @@ jobs:
         run: 'go build'
         env:
           CGO_ENABLED: 0
+
       - uses: 'actions/upload-artifact@v2'
         with:
           name: 'packer-builder-arm-image'
@@ -56,5 +58,6 @@ jobs:
       - run: 'make build'
       - uses: 'actions/upload-artifact@v2'
         with:
+          name: 'image'
           path: 'build/'
           if-no-files-found: 'error'

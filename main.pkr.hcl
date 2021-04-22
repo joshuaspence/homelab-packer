@@ -16,10 +16,7 @@ source "arm-image" "raspios" {
 }
 
 locals {
-  env = [
-    "LC_ALL=C",
-  ]
-
+  env     = ["LC_ALL=C"]
   shebang = "/bin/sh -eux"
 }
 
