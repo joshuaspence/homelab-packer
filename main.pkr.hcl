@@ -80,4 +80,9 @@ build {
     environment_vars = local.env
     inline_shebang   = local.shebang
   }
+
+  post-processor "compress" {
+    output              = "build/raspberry_pi.img.gz"
+    keep_input_artifact = true
+  }
 }

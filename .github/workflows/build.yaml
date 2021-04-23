@@ -61,5 +61,5 @@ jobs:
       - uses: 'actions/upload-artifact@v2'
         with:
           name: 'image'
-          path: 'build'
+          path: 'build/*.img.gz'
           if-no-files-found: 'error'
