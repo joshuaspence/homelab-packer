@@ -71,6 +71,17 @@ build {
     inline_shebang   = local.shebang
   }
 
+  # Remove unnecessary packages.
+  provisioner "shell" {
+    inline           = [
+      "apt-get --quiet --yes purge libraspberrypi-doc",
+      "dpkg --get-selections *-dev | cut --fields=1 | xargs apt-get --quiet --yes remove",
+    ]
+
+    environment_vars = local.env
+    inline_shebang   = local.shebang
+  }
+
   # Cleanup.
   provisioner "shell" {
     inline = [
