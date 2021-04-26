@@ -73,7 +73,7 @@ build {
 
   # Remove unnecessary packages.
   provisioner "shell" {
-    inline           = [
+    inline = [
       "apt-get --quiet --yes purge libraspberrypi-doc",
       "dpkg --get-selections *-dev | cut --fields=1 | xargs apt-get --quiet --yes remove",
     ]
@@ -90,6 +90,10 @@ build {
     ]
     environment_vars = local.env
     inline_shebang   = local.shebang
+  }
+
+  post-processor "shell-local" {
+    command = "tools/pishrink/pishrink.sh -s build/raspberry_pi.img"
   }
 
   post-processor "compress" {

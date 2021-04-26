@@ -44,6 +44,8 @@ jobs:
       PACKER_PLUGIN_PATH: '~/.packer.d/plugins'
     steps:
       - uses: 'actions/checkout@v2'
+        with:
+          submodules: true
       - uses: 'actions/cache@v2'
         with:
           path: 'packer_cache'
