@@ -92,6 +92,7 @@ build {
     inline_shebang   = local.shebang
   }
 
+  # Shrink the image by reclaiming unused disk space.
   post-processor "shell-local" {
     command = "tools/pishrink/pishrink.sh -s build/raspberry_pi.img"
   }
