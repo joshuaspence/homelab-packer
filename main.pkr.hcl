@@ -75,7 +75,7 @@ build {
   provisioner "shell" {
     inline = [
       "apt-get --quiet --yes purge libraspberrypi-doc",
-      "dpkg --get-selections *-dev | cut --fields=1 | xargs apt-get --quiet --yes remove",
+      "dpkg --get-selections *-dev | cut --fields=1 | xargs apt-get --quiet --yes purge",
     ]
 
     environment_vars = local.env
