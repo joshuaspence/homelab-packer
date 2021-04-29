@@ -1,7 +1,7 @@
 #===============================================================================
 # Macros
 #===============================================================================
-CLOUD_LOCALDS = cloud-localds
+CP            = $(SUDO) cp
 DD            = $(SUDO) dd bs=4M conv=fsync status=progress
 KPARTX        = $(SUDO) kpartx
 MKDIR         = mkdir
@@ -10,7 +10,7 @@ NSPAWN        = $(SUDO) systemd-nspawn --quiet
 PACKER        = packer
 RM            = rm --force
 RMDIR         = rmdir
-SFDISK        = $(SUDO) sfdisk --quiet
+SPONGE        = $(SUDO) sponge
 SUDO          = sudo --preserve-env
 SYNC          = $(SUDO) sync
 UMOUNT        = $(SUDO) umount --recursive
@@ -52,9 +52,19 @@ clean-all: clean
 
 .PHONY: deploy
 deploy:
+	@# Copy image.
 	$(DD) if=$(IMAGE) of=$(DEVICE)
-	echo 'start=2048, size=1024, type=83' | $(SFDISK) --append $(DEVICE)
-	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(CLOUD_LOCALDS) - - files/meta-data.yaml | $(DD) of=$(DEVICE)3
+
+	@# Add `cloud-init` data.
+	$(SYNC) $(DEVICE)
+	$(eval BOOT_MOUNTPOINT := $(shell mktemp --directory))
+	$(MOUNT) $(DEVICE)1 $(BOOT_MOUNTPOINT)
+	$(CP) files/meta-data.yaml $(BOOT_MOUNTPOINT)/meta-data
+	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(SPONGE) $(BOOT_MOUNTPOINT)/user-data
+	$(UMOUNT) $(BOOT_MOUNTPOINT)
+	$(RMDIR) $(BOOT_MOUNTPOINT)
+
+	@# Synchronize cached writes.
 	$(SYNC) $(DEVICE)
 
 .PHONY: mount
