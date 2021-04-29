@@ -24,6 +24,7 @@ cloud_final_modules:
   - 'power-state-change'
 manage_etc_hosts: true
 package_reboot_if_required: true
+package_update: true
 package_upgrade: true
 users:
   - 'default'
