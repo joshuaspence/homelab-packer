@@ -78,7 +78,7 @@ build {
   # Remove unnecessary packages.
   provisioner "shell" {
     inline = [
-      "apt-get --quiet --yes purge libraspberrypi-doc",
+      "apt-get --quiet --yes purge libraspberrypi-doc raspberrypi-net-mods",
       "dpkg --get-selections *-dev | cut --fields=1 | xargs apt-get --quiet --yes purge",
     ]
 
