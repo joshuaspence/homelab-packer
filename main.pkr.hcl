@@ -16,7 +16,11 @@ source "arm-image" "raspios" {
 }
 
 locals {
-  env     = ["LC_ALL=C"]
+  env = [
+    "DEBIAN_FRONTEND=noninteractive",
+    "LC_ALL=C",
+  ]
+
   shebang = "/bin/sh -eux"
 }
 
@@ -26,6 +30,18 @@ build {
 
     # This ensures that we don't run out of disk space in the provisioner steps.
     target_image_size = 4 * 1024 * 1024 * 1024
+  }
+
+  # Install additional locales.
+  provisioner "shell" {
+    inline = [
+      "echo 'locales locales/locales_to_be_generated multiselect en_AU.UTF-8 UTF-8, en_US.UTF-8 UTF-8' | debconf-set-selections",
+      "rm /etc/locale.gen",
+      "dpkg-reconfigure --frontend noninteractive locales",
+    ]
+
+    environment_vars = local.env
+    inline_shebang   = local.shebang
   }
 
   # Enable SSH.
