@@ -107,6 +107,17 @@ build {
     inline = [
       "apt-get --quiet clean",
       "rm --recursive --force /var/lib/apt/*",
+      "rm --force /var/cache/debconf/*-old",
+      "rm --force /var/lib/dpkg/*-old",
+
+      "rm --force /etc/passwd- /etc/group-",
+      "rm --force /etc/shadow- /etc/gshadow-",
+      "rm --force /etc/subuid- /etc/subgid-",
+
+      "rm --force /etc/machine-id /var/lib/dbus/machine-id",
+      "rm --force /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub",
+
+      "find /var/log -type f -print0 | xargs --null truncate --size=0",
     ]
     environment_vars = local.env
     inline_shebang   = local.shebang
