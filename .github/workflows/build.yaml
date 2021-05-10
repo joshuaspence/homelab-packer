@@ -57,6 +57,8 @@ jobs:
           name: 'packer-builder-arm-image'
           path: '${{ env.PACKER_PLUGIN_PATH }}'
       - run: 'chmod +x ${{ env.PACKER_PLUGIN_PATH }}/packer-builder-arm-image'
+
+      - run: 'sudo apt-get update'
       - run: 'sudo apt-get install kpartx qemu-user-static'
 
       - run: 'make build'
