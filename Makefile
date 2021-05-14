@@ -19,9 +19,12 @@ YQ            = yq --prettyPrint
 #===============================================================================
 # Configuration
 #===============================================================================
-MAKEFLAGS += --no-builtin-rules
-MAKEFLAGS += --no-print-directory
-MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS   += --no-builtin-rules
+MAKEFLAGS   += --no-print-directory
+MAKEFLAGS   += --warn-undefined-variables
+.SHELLFLAGS += -o errexit
+.SHELLFLAGS += -o nounset
+
 
 #===============================================================================
 # Target Definitions
