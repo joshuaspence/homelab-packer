@@ -1,7 +1,6 @@
 #===============================================================================
 # Macros
 #===============================================================================
-CP      = $(SUDO) cp
 DD      = $(SUDO) dd bs=4M conv=fsync status=progress
 KPARTX  = $(SUDO) kpartx
 MKDIR   = mkdir
@@ -10,7 +9,6 @@ NSPAWN  = $(SUDO) systemd-nspawn --quiet
 PACKER  = $(SUDO) packer
 RM      = rm --force
 RMDIR   = rmdir
-SPONGE  = $(SUDO) sponge
 SUDO    = sudo --preserve-env
 SYNC    = $(SUDO) sync
 UMOUNT  = $(SUDO) umount --recursive
@@ -62,8 +60,8 @@ deploy:
 	$(SYNC) $(DEVICE)
 	$(eval BOOT_MOUNTPOINT := $(shell mktemp --directory))
 	$(MOUNT) $(DEVICE)1 $(BOOT_MOUNTPOINT)
-	$(CP) files/meta-data.yaml $(BOOT_MOUNTPOINT)/meta-data
-	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(SPONGE) $(BOOT_MOUNTPOINT)/user-data
+	$(SUDO) cp files/meta-data.yaml $(BOOT_MOUNTPOINT)/meta-data
+	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(SUDO) sponge $(BOOT_MOUNTPOINT)/user-data
 	$(UMOUNT) $(BOOT_MOUNTPOINT)
 	$(RMDIR) $(BOOT_MOUNTPOINT)
 
