@@ -1,30 +1,30 @@
 #===============================================================================
 # Macros
 #===============================================================================
-CP            = $(SUDO) cp
-DD            = $(SUDO) dd bs=4M conv=fsync status=progress
-KPARTX        = $(SUDO) kpartx
-MKDIR         = mkdir
-MOUNT         = $(SUDO) mount
-NSPAWN        = $(SUDO) systemd-nspawn --quiet
-PACKER        = packer
-RM            = rm --force
-RMDIR         = rmdir
-SPONGE        = $(SUDO) sponge
-SUDO          = sudo --preserve-env
-SYNC          = $(SUDO) sync
-UMOUNT        = $(SUDO) umount --recursive
-YQ            = yq --prettyPrint
+CP      = $(SUDO) cp
+DD      = $(SUDO) dd bs=4M conv=fsync status=progress
+KPARTX  = $(SUDO) kpartx
+MKDIR   = mkdir
+MOUNT   = $(SUDO) mount
+NSPAWN  = $(SUDO) systemd-nspawn --quiet
+PACKER  = $(SUDO) packer
+RM      = rm --force
+RMDIR   = rmdir
+SPONGE  = $(SUDO) sponge
+SUDO    = sudo --preserve-env
+SYNC    = $(SUDO) sync
+UMOUNT  = $(SUDO) umount --recursive
+YQ      = yq --prettyPrint
 
 #===============================================================================
 # Configuration
 #===============================================================================
-MAKEFLAGS   += --no-builtin-rules
-MAKEFLAGS   += --no-print-directory
-MAKEFLAGS   += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --warn-undefined-variables
+
 .SHELLFLAGS += -o errexit
 .SHELLFLAGS += -o nounset
-
 
 #===============================================================================
 # Target Definitions
@@ -96,4 +96,4 @@ $(CHROOT): | $(IMAGE)
 .ONESHELL: $(IMAGE)
 $(IMAGE):
 	RASPIOS_URL=$$(curl --fail --head --no-location --output /dev/null --show-error --silent --write-out '%{redirect_url}' https://downloads.raspberrypi.org/raspios_lite_armhf_latest)
-	$(SUDO) $(PACKER) build -var raspios_url=$${RASPIOS_URL} .
+	$(PACKER) build -var raspios_url=$${RASPIOS_URL} .
