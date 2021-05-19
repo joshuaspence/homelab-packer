@@ -63,7 +63,7 @@ deploy:
 	$(SUDO) cp files/meta-data.yaml $(BOOT_MOUNTPOINT)/meta-data
 	$(YQ) eval '.hostname = "$(HOSTNAME)"' files/user-data.yaml | $(SUDO) sponge $(BOOT_MOUNTPOINT)/user-data
 	$(UMOUNT) $(BOOT_MOUNTPOINT)
-	$(RMDIR) $(BOOT_MOUNTPOINT)
+	@$(RMDIR) $(BOOT_MOUNTPOINT)
 
 	@# Synchronize cached writes.
 	$(SYNC) $(DEVICE)
