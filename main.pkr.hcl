@@ -114,7 +114,8 @@ build {
       "rm --force /etc/shadow- /etc/gshadow-",
       "rm --force /etc/subuid- /etc/subgid-",
 
-      "rm --force /etc/machine-id /var/lib/dbus/machine-id",
+      "true > /etc/machine-id",
+      "rm --force /var/lib/dbus/machine-id",
       "rm --force /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub",
 
       "find /var/log -type f -print0 | xargs --null truncate --size=0",
