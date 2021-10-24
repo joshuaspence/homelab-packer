@@ -81,6 +81,7 @@ unmount:
 # Rules
 #===============================================================================
 
+# TODO: Use `losetup` instead of `kpartx` (see solo-io/packer-plugin-arm-image#115).
 $(CHROOT): | $(IMAGE)
 	@# Create a device map.
 	$(KPARTX) -a -s $|

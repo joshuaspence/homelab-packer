@@ -1,5 +1,12 @@
 packer {
   required_version = ">= 1.7.0"
+
+  required_plugins {
+    arm-image = {
+      source  = "github.com/solo-io/arm-image"
+      version = ">= 0.2.5"
+    }
+  }
 }
 
 # TODO: Automatically look up the latest version from
