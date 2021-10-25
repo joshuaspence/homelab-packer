@@ -18,7 +18,7 @@ jobs:
           key: 'packer_cache'
 
       - uses: 'hashicorp-contrib/setup-packer@v1'
-      - run: 'packer init'
+      - run: 'packer init .'
 
       - run: 'make build'
       - uses: 'actions/upload-artifact@v2'
