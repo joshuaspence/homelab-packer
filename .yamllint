@@ -5,5 +5,3 @@ rules:
   comments:
     ignore: |-
       /files/user-data.yaml
-  key-ordering: 'disable'
-  line-length: 'disable'
