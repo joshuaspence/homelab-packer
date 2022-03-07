@@ -9,18 +9,18 @@ jobs:
   packer-fmt:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v2'
+      - uses: 'actions/checkout@v3'
       - uses: 'hashicorp-contrib/setup-packer@v1'
       - run: 'packer fmt -check .'
 
   shellcheck:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v2'
+      - uses: 'actions/checkout@v3'
       - uses: 'ludeeus/action-shellcheck@1.1.0'
 
   yamllint:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v2'
+      - uses: 'actions/checkout@v3'
       - uses: 'ibiqlik/action-yamllint@v3'
