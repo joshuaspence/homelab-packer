@@ -21,7 +21,7 @@ jobs:
       - run: 'packer init .'
 
       - run: 'make build'
-      - uses: 'actions/upload-artifact@v2'
+      - uses: 'actions/upload-artifact@v3'
         with:
           name: 'image'
           path: 'build/*.img.gz'
