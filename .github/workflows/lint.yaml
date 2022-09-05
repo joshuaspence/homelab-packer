@@ -10,7 +10,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: 'actions/checkout@v3'
-      - uses: 'hashicorp-contrib/setup-packer@v1'
+      - uses: 'hashicorp-contrib/setup-packer@v2'
       - run: 'packer fmt -check .'
 
   shellcheck:
