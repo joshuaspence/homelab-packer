@@ -17,7 +17,7 @@ jobs:
           path: 'packer_cache'
           key: 'packer_cache'
 
-      - uses: 'hashicorp-contrib/setup-packer@v2'
+      - uses: 'hashicorp-contrib/setup-packer@v3'
       - run: 'packer init .'
 
       - run: 'make build'
